@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#07110c" />
+<meta name="referrer" content="no-referrer" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Wr0YiDjMY8OyXQjlE6iayxItbGtEoPGWPnwpUQqTXnA='; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; media-src 'none'; font-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; child-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'none'" />
+<meta name="format-detection" content="telephone=no,email=no,address=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="KAKUNTE" />
+<style>
+@property --scene-a{syntax:"<color>";inherits:true;initial-value:#1d4932}
+@property --scene-b{syntax:"<color>";inherits:true;initial-value:#0c2418}
+@property --scene-c{syntax:"<color>";inherits:true;initial-value:#06100b}
+@property --panel{syntax:"<color>";inherits:true;initial-value:rgba(15,32,23,.72)}
+@property --control{syntax:"<color>";inherits:true;initial-value:rgba(8,20,13,.62)}
+@property --control-hover{syntax:"<color>";inherits:true;initial-value:rgba(28,54,38,.72)}
+@property --text{syntax:"<color>";inherits:true;initial-value:#e7f1e9}
+@property --muted{syntax:"<color>";inherits:true;initial-value:#9eb0a3}
+@property --accent{syntax:"<color>";inherits:true;initial-value:#b9e6bd}
+@property --orb-hi{syntax:"<color>";inherits:true;initial-value:rgba(231,255,237,.22)}
+@property --orb-mid{syntax:"<color>";inherits:true;initial-value:rgba(102,170,122,.13)}
+@property --orb-low{syntax:"<color>";inherits:true;initial-value:rgba(12,42,24,.28)}
+@property --sky-glow{syntax:"<color>";inherits:true;initial-value:rgba(219,240,181,.08)}
+:root{--bg:#07110c;--scene-a:#1d4932;--scene-b:#0c2418;--scene-c:#06100b;--panel:rgba(15,32,23,.72);--control:rgba(8,20,13,.62);--control-hover:rgba(28,54,38,.72);--text:#e7f1e9;--muted:#9eb0a3;--line:rgba(255,255,255,.10);--accent:#b9e6bd;--orb-hi:rgba(231,255,237,.22);--orb-mid:rgba(102,170,122,.13);--orb-low:rgba(12,42,24,.28);--sky-glow:rgba(219,240,181,.08);--morph-duration:18s;transition:--scene-a var(--morph-duration) cubic-bezier(.22,.61,.36,1),--scene-b var(--morph-duration) cubic-bezier(.22,.61,.36,1),--scene-c var(--morph-duration) cubic-bezier(.22,.61,.36,1),--panel var(--morph-duration) ease,--control var(--morph-duration) ease,--control-hover var(--morph-duration) ease,--text var(--morph-duration) ease,--muted var(--morph-duration) ease,--accent var(--morph-duration) ease,--orb-hi var(--morph-duration) ease,--orb-mid var(--morph-duration) ease,--orb-low var(--morph-duration) ease,--sky-glow var(--morph-duration) ease}
+*{box-sizing:border-box} html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Hiragino Sans","Yu Gothic",sans-serif}
+body{touch-action:none}.app{position:relative;width:100%;height:100%;min-height:600px;background:radial-gradient(circle at 50% 28%,var(--scene-a) 0,var(--scene-b) 42%,var(--scene-c) 100%);transition:none}
+canvas{position:absolute;inset:0;width:100%;height:100%}.veil{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 12%,var(--sky-glow),transparent 58%),radial-gradient(circle at 18% 24%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 34%),linear-gradient(to bottom,rgba(255,255,255,.035),transparent 30%,rgba(0,0,0,.30));pointer-events:none}
+.topbar{position:absolute;left:22px;right:22px;top:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:4}.brand{letter-spacing:.18em;font-size:12px;color:#d9e7dc}.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+button,select{border:1px solid var(--line);background:var(--control);color:var(--text);border-radius:999px;padding:9px 13px;font:inherit;font-size:12px;backdrop-filter:blur(14px);transition:background .18s ease,border-color .18s ease,color .18s ease}button{cursor:pointer}button:hover{background:var(--control-hover)}button.active{background:color-mix(in srgb,var(--accent) 14%,transparent);border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.center{position:absolute;inset:90px 0 180px;display:grid;place-items:center;z-index:3}.orb-wrap{text-align:center}.orb{width:min(40vw,300px);height:min(40vw,300px);min-width:210px;min-height:210px;border-radius:50%;position:relative;cursor:grab;box-shadow:0 0 80px color-mix(in srgb,var(--accent) 13%,transparent),inset 0 0 45px rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);background:radial-gradient(circle at 38% 30%,var(--orb-hi),var(--orb-mid) 34%,var(--orb-low) 70%,rgba(5,14,9,.60));backdrop-filter:blur(10px)}
+.orb:active{cursor:grabbing}.orb::after{content:"";position:absolute;inset:14%;border-radius:50%;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 0 30px rgba(178,235,193,.06)}.cursor{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px color-mix(in srgb,var(--accent) 72%,transparent);transform:translate(-50%,-50%);left:50%;top:50%;pointer-events:none}.orb-labels{position:absolute;inset:0;pointer-events:none}.orb-labels span{position:absolute;font-size:10px;line-height:1;letter-spacing:.08em;color:color-mix(in srgb,var(--text) 58%,transparent);text-transform:uppercase;white-space:nowrap}.l{left:18px;top:50%;transform:translateY(-50%)}.r{right:18px;top:50%;transform:translateY(-50%)}.t{top:18px;left:50%;transform:translateX(-50%)}.b{bottom:18px;left:50%;transform:translateX(-50%)}
+.readout{margin-top:16px;color:var(--muted);font-size:11px;letter-spacing:.08em}.hint{margin-top:7px;color:rgba(231,241,233,.42);font-size:10px}
+.bottom{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:min(1200px,calc(100% - 28px));padding:12px 16px 14px;background:var(--panel);border:1px solid var(--line);border-radius:22px;backdrop-filter:blur(18px);z-index:4;display:grid;grid-template-columns:repeat(7,1fr) 1.15fr;gap:10px 12px;align-items:end}.param-head,.master label{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);margin-bottom:8px}.param output,.master output{color:#dce9df}.param input,.master input,.sound-editor input{width:100%;accent-color:var(--accent)}.mix-toggle{border:0;background:transparent;padding:0;border-radius:0;color:var(--muted);font-size:11px;letter-spacing:.02em}.mix-toggle::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;background:var(--accent);box-shadow:0 0 7px color-mix(in srgb,var(--accent) 35%,transparent)}.mix-toggle.off{opacity:.38;text-decoration:none}.mix-toggle.off::before{background:#68736b;box-shadow:none}.edit-btn{border:0;background:transparent;padding:0 0 0 6px;border-radius:0;color:rgba(231,241,233,.52);font-size:9px}.sound-select{width:100%;border-radius:10px;padding:7px 9px;background:var(--control);font-size:10px}.sound-editor{grid-column:1/-1;display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:10px 12px;padding-top:10px;border-top:1px solid var(--line)}.sound-editor.hidden{display:none}.sound-editor label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px}.pad-name{display:flex;align-items:center;gap:2px}.master{padding-left:8px;border-left:1px solid var(--line)}
+.start{position:absolute;inset:0;display:grid;place-items:center;background:rgba(3,10,8,.55);backdrop-filter:blur(8px);z-index:10}.start-card{width:min(420px,calc(100% - 36px));padding:28px;border:1px solid var(--line);border-radius:26px;background:var(--panel);text-align:center}.start h1{font-size:25px;font-weight:500;letter-spacing:.08em;margin:0 0 10px}.start p{font-size:13px;line-height:1.8;color:var(--muted);margin:0 0 18px}.start button{padding:12px 24px;font-size:13px}.hidden{display:none}
+.toast{position:absolute;left:50%;top:72px;transform:translateX(-50%);z-index:20;background:var(--control);border:1px solid var(--line);padding:8px 13px;border-radius:999px;font-size:11px;color:var(--muted);opacity:0;transition:.25s;pointer-events:none}.toast.show{opacity:1}
+@media(max-width:700px){.app{min-height:500px}.topbar{left:12px;right:12px;top:12px;align-items:flex-start}.brand{padding-top:9px}.controls{max-width:72%}.controls button,.controls select{padding:7px 9px}.center{inset:105px 0 300px}.orb{width:220px;height:220px}.bottom{bottom:10px;grid-template-columns:repeat(2,1fr);gap:10px;border-radius:18px}.master{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);padding:9px 0 0}.param-head,.master label{margin-bottom:4px}.sound-editor{grid-template-columns:1fr}}
+
+/* iPhone / mobile browser hardening */
+html,body{width:100%;height:100%;height:100dvh;min-height:0;overscroll-behavior:none;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.app{height:100%;height:100dvh;min-height:0;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}
+button,select,input{touch-action:manipulation}
+button{min-height:38px}
+input[type="range"]{min-height:30px}
+.start{padding:calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 12px) calc(env(safe-area-inset-bottom) + 12px) calc(env(safe-area-inset-left) + 12px)}
+.start button{min-height:48px}
+@media(max-width:700px){
+  .app{min-height:0}
+  .topbar{left:calc(env(safe-area-inset-left) + 14px);right:calc(env(safe-area-inset-right) + 14px);top:calc(env(safe-area-inset-top) + 10px);display:block}
+  .brand{padding:0 2px 10px;font-size:14px;font-weight:500;letter-spacing:.24em;color:color-mix(in srgb,var(--text) 92%,transparent)}
+  .controls{width:100%;max-width:none;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:7px;overflow:visible;padding:0;mask-image:none}
+  .controls button,.controls select{width:100%;min-width:0;min-height:42px;padding:7px 10px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:16px}
+  .controls select{font-size:16px;padding-right:25px}
+  #preset{grid-column:1/13;font-size:17px;min-height:46px;padding-left:14px}
+  #key{grid-column:1/4} #scale{grid-column:4/9} #randomScope{grid-column:9/13}
+  #randomize{grid-column:1/5;font-size:11px} #save{grid-column:5/8} #load{grid-column:8/11} #transport{grid-column:11/13;font-size:11px}
+  .center{left:env(safe-area-inset-left);right:env(safe-area-inset-right);top:calc(env(safe-area-inset-top) + 184px);bottom:calc(env(safe-area-inset-bottom) + 66px);display:grid;place-items:center}
+  .orb-wrap{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;transform:translateX(0)}
+  .orb{width:clamp(235px,68vw,292px);height:clamp(235px,68vw,292px);min-width:0;min-height:0;margin:0 auto}
+  .orb-labels span{font-size:9px}.l{left:17px}.r{right:17px}.t{top:17px}.b{bottom:17px}
+  .readout{margin-top:11px;font-size:10px}.hint{font-size:9px;margin-top:5px;padding:0 10px}
+
+  /* MIX: scrollable channel rack. Editors expand inline instead of covering controls. */
+  .bottom{left:calc(env(safe-area-inset-left) + 12px);right:calc(env(safe-area-inset-right) + 12px);top:calc(env(safe-area-inset-top) + 62px);bottom:calc(env(safe-area-inset-bottom) + 66px);transform:none;width:auto;max-height:none;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:auto;gap:10px;padding:12px;border-radius:22px;align-content:start;align-items:start}
+  .bottom::-webkit-scrollbar{display:none}
+  .param,.master{min-width:0;align-self:auto;display:flex;flex-direction:column;justify-content:center;background:color-mix(in srgb,var(--control) 62%,transparent);border:1px solid color-mix(in srgb,var(--line) 88%,transparent);border-radius:16px;padding:11px 12px;min-height:102px}
+  .param-head,.master label{font-size:11px;margin-bottom:8px;min-height:32px;align-items:center}
+  .param input,.master input{margin-top:auto}
+  .pad-name{display:flex;align-items:center;gap:6px;min-width:0}
+  .mix-toggle{min-height:31px;padding:6px 9px;border:1px solid color-mix(in srgb,var(--line) 88%,transparent);border-radius:999px;background:color-mix(in srgb,var(--accent) 8%,var(--control));color:var(--text);font-size:11px;letter-spacing:.01em;white-space:nowrap}
+  .mix-toggle:hover{background:color-mix(in srgb,var(--accent) 11%,var(--control))}
+  .mix-toggle.off{opacity:.44;background:var(--control)}
+  .mix-toggle::before{width:6px;height:6px;margin-right:6px}
+  .edit-btn{min-height:31px;padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);font-size:10px;white-space:nowrap}
+  .edit-btn:hover{background:var(--control-hover)}
+  .param output,.master output{font-size:13px;color:var(--text)}
+  .master{grid-column:1/-1;border-left:1px solid color-mix(in srgb,var(--line) 88%,transparent);border-top:1px solid color-mix(in srgb,var(--line) 88%,transparent);padding:11px 12px;min-height:92px}
+  .sound-editor{position:static;left:auto;right:auto;bottom:auto;z-index:auto;grid-column:1/-1;grid-template-columns:1fr;gap:12px;padding:14px;margin:0;background:color-mix(in srgb,var(--panel) 92%,black);border:1px solid color-mix(in srgb,var(--accent) 17%,var(--line));border-radius:17px;backdrop-filter:blur(18px);max-height:none;overflow:visible;box-shadow:none;scroll-margin-top:8px}
+  .sound-editor label{font-size:11px;margin-bottom:7px}.sound-select{min-height:44px;font-size:16px;border-radius:13px;padding:8px 11px}
+  .mobile-tabs{position:absolute;display:grid;grid-template-columns:1fr 1fr;gap:7px;left:calc(env(safe-area-inset-left) + 12px);right:calc(env(safe-area-inset-right) + 12px);bottom:calc(env(safe-area-inset-bottom) + 8px);height:48px;z-index:9;padding:4px;background:rgba(4,13,8,.58);border:1px solid var(--line);border-radius:999px;backdrop-filter:blur(18px)}
+  .mobile-tabs button{min-height:38px;padding:6px 12px;background:transparent;border-color:transparent;color:var(--muted)}
+  .mobile-tabs button.active{background:color-mix(in srgb,var(--accent) 14%,var(--control));border-color:color-mix(in srgb,var(--accent) 26%,transparent);color:var(--text)}
+  .app[data-mobile-view="scene"] .bottom{display:none}
+  .app[data-mobile-view="mix"] .center{display:none}
+  .app[data-mobile-view="mix"] .controls{display:none}
+  .app[data-mobile-view="mix"] .topbar{height:38px}
+  .app[data-mobile-view="mix"] .brand{padding-top:2px}
+  .toast{top:calc(env(safe-area-inset-top) + 52px);max-width:calc(100% - 24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .start-card{width:min(410px,calc(100% - 16px));padding:24px 20px}.start h1{font-size:23px}.start p{font-size:13px}
+}
+@media(min-width:701px){.mobile-tabs{display:none}}
+@media(max-width:390px){
+  .brand{font-size:13px;padding-bottom:8px}
+  .controls{gap:6px}
+  .controls button,.controls select{min-height:40px;padding-left:8px;padding-right:8px}
+  #preset{min-height:44px;font-size:16px}
+  #randomize{font-size:10px}
+  .center{top:calc(env(safe-area-inset-top) + 176px)}
+  .orb{width:clamp(220px,66vw,255px);height:clamp(220px,66vw,255px)}
+  .bottom{gap:8px;padding:10px}
+  .param{padding:10px;min-height:98px}
+}
+@media(max-height:620px) and (orientation:landscape){
+  .mobile-tabs{left:calc(env(safe-area-inset-left) + 10px);right:auto;width:42%;bottom:calc(env(safe-area-inset-bottom) + 8px)}
+  .topbar{right:52%}.controls{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .center{top:calc(env(safe-area-inset-top) + 90px);bottom:calc(env(safe-area-inset-bottom) + 62px);right:50%}
+  .orb{width:min(42vh,210px);height:min(42vh,210px);min-width:155px;min-height:155px}
+  .bottom{left:50%;right:calc(env(safe-area-inset-right) + 8px);top:calc(env(safe-area-inset-top) + 12px);bottom:calc(env(safe-area-inset-bottom) + 8px);grid-template-columns:repeat(2,minmax(0,1fr))}
+  .app[data-mobile-view="mix"] .topbar{display:none}
+}
+</style>
+<title>KAKUNTE</title>
+</head>
+<body>
+
+<div class="app" id="app" data-mobile-view="scene">
+  <canvas id="forest"></canvas><div class="veil"></div>
+  <div class="topbar">
+    <div class="brand">KAKUNTE</div>
+    <div class="controls">
+      <select id="preset" aria-label="Preset by time of day">
+        <option value="__custom__" id="customPresetOption" disabled hidden>Custom Drift</option>
+        <optgroup label="Dawn"><option>Misty Lake</option><option>Quiet Shrine</option><option>First Light</option><option>Blue Hour</option><option>Dew Awakening</option></optgroup>
+        <optgroup label="Morning"><option selected>Morning Forest</option><option>After Rain</option><option>Rainy Woods</option><option>Cedar Morning</option><option>Birdsong Clearing</option></optgroup>
+        <optgroup label="Day"><option>Sunlit Canopy</option><option>Autumn Creek</option><option>Green Cathedral</option><option>River Canopy</option><option>Summer Shade</option></optgroup>
+        <optgroup label="Evening"><option>Ancient Forest</option><option>Moss Temple</option><option>Amber Grove</option><option>Golden Mist</option><option>Dusk Creek</option></optgroup>
+        <optgroup label="Night"><option>Deep Night</option><option>Moonlit Pines</option><option>Fog Valley</option><option>Starless Woods</option><option>Midnight Rain</option></optgroup>
+      </select>
+      <select id="key" aria-label="Key"><option value="0">C</option><option value="1">C♯</option><option value="2" selected>D</option><option value="3">D♯</option><option value="4">E</option><option value="5">F</option><option value="6">F♯</option><option value="7">G</option><option value="8">G♯</option><option value="9">A</option><option value="10">A♯</option><option value="11">B</option></select>
+      <select id="scale" aria-label="Electronic scale"><option value="minor-pent">Minor Pent.</option><option value="major-pent">Major Pent.</option><option value="major">Major</option><option value="natural-minor">Natural Minor</option><option value="dorian">Dorian</option><option value="mixolydian">Mixolydian</option><option value="lydian">Lydian</option><option value="phrygian">Phrygian</option><option value="harmonic-minor">Harmonic Minor</option><option value="insen">In Sen</option><option value="whole-tone">Whole Tone</option></select>
+      <select id="randomScope" aria-label="Randomize time"><option value="all">All Time</option><option value="dawn">Dawn</option><option value="morning">Morning</option><option value="day">Day</option><option value="evening">Evening</option><option value="night">Night</option></select><button id="randomize">Randomize</button><button id="save">Save</button><button id="load">Load</button><button id="transport">Stop</button>
+    </div>
+  </div>
+  <div class="center"><div class="orb-wrap">
+    <div class="orb" id="orb"><div class="cursor" id="cursor"></div><div class="orb-labels"><span class="l">Dark</span><span class="r">Bright</span><span class="t">Pad</span><span class="b">Pluck</span></div></div>
+    <div class="readout" id="readout">Brightness 50 · Pad 55 · Depth 55</div><div class="hint">drag: bright/dark + pad/pluck · wheel/pinch: depth · tap: tone</div>
+  </div></div>
+  <div class="bottom" id="mixerRack">
+    <div class="param"><div class="param-head"><div class="pad-name"><button class="mix-toggle active" data-sound="pad" data-label="Pad">Pad</button><button class="edit-btn" data-editor="padEditor">Edit</button></div><output id="padOut">22</output></div><input id="pad" type="range" min="0" max="100" value="22"></div>
+    <div class="param"><div class="param-head"><div class="pad-name"><button class="mix-toggle active" data-sound="tones" data-label="Pluck">Pluck</button><button class="edit-btn" data-editor="pluckEditor">Edit</button></div><output id="pluckOut">52</output></div><input id="pluck" type="range" min="0" max="100" value="52"></div>
+    <div class="param"><div class="param-head"><div class="pad-name"><button class="mix-toggle active" data-sound="birds" data-label="Bird">Bird</button><button class="edit-btn" data-editor="birdEditor">Edit</button></div><output id="birdOut">38</output></div><input id="bird" type="range" min="0" max="100" value="38"></div>
+    <div class="param"><div class="param-head"><button class="mix-toggle active" data-sound="rain" data-label="Rain">Rain</button><output id="rainOut">12</output></div><input id="rain" type="range" min="0" max="100" value="12"></div>
+    <div class="param"><div class="param-head"><button class="mix-toggle active" data-sound="wind" data-label="Wind">Wind</button><output id="windOut">20</output></div><input id="wind" type="range" min="0" max="100" value="20"></div>
+    <div class="param"><div class="param-head"><div class="pad-name"><button class="mix-toggle active" data-sound="delay" data-label="Delay">Delay</button><button class="edit-btn" data-editor="delayEditor">Edit</button></div><output id="delayOut">42</output></div><input id="delay" type="range" min="0" max="100" value="42"></div>
+    <div class="param"><div class="param-head"><div class="pad-name"><button class="mix-toggle active" data-sound="space" data-label="Space">Space</button><button class="edit-btn" data-editor="spaceEditor">Edit</button></div><output id="spaceOut">68</output></div><input id="space" type="range" min="0" max="100" value="68"></div>
+    <div class="master"><label>Master <output id="masterOut">72</output></label><input id="master" type="range" min="0" max="100" value="72"></div>
+    <div class="sound-editor hidden" id="padEditor">
+      <div><label>Pad Style</label><select class="sound-select" id="padStyle"></select></div>
+      <div><label>Pad Tone <output id="padToneOut">38</output></label><input id="padTone" type="range" min="0" max="100" value="38"></div>
+      <div><label>Pad Motion <output id="padMotionOut">20</output></label><input id="padMotionCtl" type="range" min="0" max="100" value="20"></div>
+      <div><label>Pad Spread <output id="padSpreadOut">52</output></label><input id="padSpread" type="range" min="0" max="100" value="52"></div>
+    </div>
+    <div class="sound-editor hidden" id="pluckEditor">
+      <div><label>Pluck Type</label><select class="sound-select" id="pluckType"></select></div>
+      <div><label>Pluck Tone <output id="pluckToneOut">50</output></label><input id="pluckToneCtl" type="range" min="0" max="100" value="50"></div>
+      <div><label>Pluck Decay <output id="pluckDecayOut">50</output></label><input id="pluckDecayCtl" type="range" min="0" max="100" value="50"></div>
+    </div>
+    <div class="sound-editor hidden" id="birdEditor">
+      <div><label>Bird Type</label><select class="sound-select" id="birdType"></select></div>
+      <div><label>Bird Pitch <output id="birdPitchOut">50</output></label><input id="birdPitchCtl" type="range" min="0" max="100" value="50"></div>
+      <div><label>Bird Wild <output id="birdWildOut">50</output></label><input id="birdWildCtl" type="range" min="0" max="100" value="50"></div>
+    </div>
+    <div class="sound-editor hidden" id="delayEditor">
+      <div><label>Delay Type</label><select class="sound-select" id="delayType"><option value="digital">Digital</option><option value="pingpong">Ping Pong</option><option value="slap">Slapback</option><option value="dotted">Dotted Echo</option><option value="dub">Dub Echo</option><option value="multitap">Multi Tap</option></select></div>
+      <div><label>Feedback <output id="delayFeedbackOut">55</output></label><input id="delayFeedbackCtl" type="range" min="0" max="100" value="55"></div>
+      <div><label>Delay Tone <output id="delayToneOut">55</output></label><input id="delayToneCtl" type="range" min="0" max="100" value="55"></div>
+    </div>
+    <div class="sound-editor hidden" id="spaceEditor">
+      <div><label>Space Type</label><select class="sound-select" id="spaceType"><option value="hall">Hall</option><option value="plate">Plate</option><option value="spring">Spring</option><option value="chamber">Chamber</option><option value="cave">Forest Cave</option><option value="cathedral">Cathedral</option><option value="shimmer">Glass Bloom</option></select></div>
+      <div><label>Damping <output id="spaceDampOut">46</output></label><input id="spaceDampCtl" type="range" min="0" max="100" value="46"></div>
+      <div><label>Pre-delay <output id="spacePreOut">30</output></label><input id="spacePreCtl" type="range" min="0" max="100" value="30"></div>
+    </div>
+  </div>
+  <div class="mobile-tabs" role="tablist" aria-label="Mobile view">
+    <button id="sceneTab" class="active" type="button" role="tab" aria-selected="true">SCENE</button>
+    <button id="mixTab" type="button" role="tab" aria-selected="false">MIX</button>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="start" id="start"><div class="start-card"><h1>KAKUNTE</h1><p>カクンテ！カクンテ！迷えしモリでアソブがイイ！</p><button id="startBtn">ENTER</button></div></div>
+</div>
+<script>
+(() => {
+'use strict';
+const $=s=>document.querySelector(s); const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)); const lerp=(a,b,t)=>a+(b-a)*t;
+const state={timeOfDay:'morning',brightness:.74,character:.38,depth:.40,pad:.12,padTone:.38,padMotion:.20,padSpread:.52,pluck:.56,pluckTone:.50,pluckDecay:.50,bird:.64,birdPitch:.50,birdWild:.50,rain:.04,wind:.14,space:.52,spaceType:'hall',spaceDamp:.46,spacePre:.30,delay:.24,delayType:'digital',delayFeedback:.55,delayTone:.55,master:.70,muted:false,keyRoot:7,scaleKey:'major-pent',soundPalette:'canopy',padPalette:'canopy',pluckPalette:'canopy',birdPalette:'canopy',soundOn:{wind:true,rain:true,pad:true,tones:true,birds:true,delay:true,space:true}};
+const keyNames=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+const scaleDefs={
+ 'minor-pent':{name:'Minor Pent.',notes:[0,3,5,7,10]},
+ 'major-pent':{name:'Major Pent.',notes:[0,2,4,7,9]},
+ 'major':{name:'Major',notes:[0,2,4,5,7,9,11]},
+ 'natural-minor':{name:'Natural Minor',notes:[0,2,3,5,7,8,10]},
+ 'dorian':{name:'Dorian',notes:[0,2,3,5,7,9,10]},
+ 'mixolydian':{name:'Mixolydian',notes:[0,2,4,5,7,9,10]},
+ 'lydian':{name:'Lydian',notes:[0,2,4,6,7,9,11]},
+ 'phrygian':{name:'Phrygian',notes:[0,1,3,5,7,8,10]},
+ 'harmonic-minor':{name:'Harmonic Minor',notes:[0,2,3,5,7,8,11]},
+ 'insen':{name:'In Sen',notes:[0,1,5,7,10]},
+ 'whole-tone':{name:'Whole Tone',notes:[0,2,4,6,8,10]}
+};
+function padIntervals(def){const n=def.notes;const fifth=n.reduce((a,b)=>Math.abs(b-7)<Math.abs(a-7)?b:a,n[0]);const third=n.find(x=>x===3||x===4)??n[Math.min(1,n.length-1)];const color=n[Math.min(1,n.length-1)];return [0,fifth,12+third,24+color]}
+const midiHz=m=>440*Math.pow(2,(m-69)/12);
+const soundPalettes={
+ 'canopy':{pad:{voicing:'open',transpose:0,tone:1.05,dry:.92,verb:1.0,delay:.75,sub:.45,waves:['sawtooth','triangle','sawtooth']},pluck:{name:'Dew',wave:'sine',base:48,oct:.48,filter:1.15,attack:.75,decay:.72,harm:2.01,harmGain:.10,drift:1.003},bird:{name:'Songbird',type:'sine',base:1150,range:1700,peak:1.42,end:.84,dur:.31,amp:1.0}},
+ 'rain':{pad:{voicing:'close',transpose:-5,tone:.72,dry:.66,verb:1.25,delay:.95,sub:.62,waves:['triangle','sawtooth','triangle']},pluck:{name:'Rain Drop',wave:'sine',base:60,oct:.62,filter:.88,attack:.55,decay:1.15,harm:2.72,harmGain:.08,drift:.994},bird:{name:'Distant Bird',type:'sine',base:950,range:900,peak:1.28,end:.91,dur:.42,amp:.62}},
+ 'night':{pad:{voicing:'low',transpose:-12,tone:.54,dry:.58,verb:1.28,delay:1.12,sub:1.0,waves:['triangle','sawtooth','triangle']},pluck:{name:'Ember',wave:'triangle',base:36,oct:.26,filter:.58,attack:1.25,decay:1.55,harm:1.50,harmGain:.07,drift:.997},bird:{name:'Owl',type:'sine',base:330,range:190,peak:1.07,end:.91,dur:1.15,amp:.74}},
+ 'lake':{pad:{voicing:'high',transpose:0,tone:.84,dry:.48,verb:1.38,delay:1.20,sub:.28,waves:['sine','triangle','sine']},pluck:{name:'Water Glass',wave:'sine',base:60,oct:.70,filter:1.28,attack:.62,decay:1.68,harm:2.00,harmGain:.18,drift:.992},bird:{name:'Lake Bird',type:'triangle',base:820,range:720,peak:1.18,end:.89,dur:.52,amp:.58}},
+ 'ancient':{pad:{voicing:'suspended',transpose:-7,tone:.62,dry:.70,verb:1.18,delay:.82,sub:.78,waves:['triangle','triangle','sawtooth']},pluck:{name:'Wood',wave:'triangle',base:48,oct:.32,filter:.66,attack:.45,decay:.55,harm:3.00,harmGain:.05,drift:.988},bird:{name:'Woodland Bird',type:'sine',base:760,range:1050,peak:1.33,end:.80,dur:.38,amp:.82}},
+ 'sun':{pad:{voicing:'open',transpose:12,tone:1.24,dry:.88,verb:.92,delay:.62,sub:.18,waves:['sawtooth','triangle','sine']},pluck:{name:'Chime',wave:'sine',base:60,oct:.78,filter:1.42,attack:.42,decay:1.28,harm:2.98,harmGain:.14,drift:1.006},bird:{name:'Warbler',type:'sine',base:1650,range:2100,peak:1.56,end:1.02,dur:.23,amp:.95}},
+ 'temple':{pad:{voicing:'suspended',transpose:-5,tone:.48,dry:.52,verb:1.45,delay:1.08,sub:.70,waves:['triangle','sine','triangle']},pluck:{name:'Temple Wood',wave:'triangle',base:48,oct:.38,filter:.72,attack:.58,decay:.86,harm:2.50,harmGain:.09,drift:.995},bird:{name:'Dove',type:'sine',base:430,range:260,peak:1.10,end:.94,dur:.82,amp:.64}},
+ 'pines':{pad:{voicing:'low',transpose:-7,tone:.44,dry:.60,verb:1.32,delay:1.02,sub:.92,waves:['triangle','sawtooth','sine']},pluck:{name:'Pine Needle',wave:'triangle',base:48,oct:.42,filter:.78,attack:.65,decay:.68,harm:2.00,harmGain:.06,drift:1.002},bird:{name:'Night Bird',type:'triangle',base:610,range:520,peak:1.22,end:.86,dur:.48,amp:.62}},
+ 'creek':{pad:{voicing:'close',transpose:0,tone:.94,dry:.80,verb:1.02,delay:.82,sub:.40,waves:['sawtooth','triangle','triangle']},pluck:{name:'Creek Drop',wave:'sine',base:60,oct:.66,filter:1.18,attack:.48,decay:.92,harm:2.02,harmGain:.12,drift:.989},bird:{name:'Creek Bird',type:'sine',base:1250,range:1450,peak:1.38,end:.82,dur:.29,amp:.86}},
+ 'fog':{pad:{voicing:'high',transpose:-12,tone:.38,dry:.38,verb:1.58,delay:1.28,sub:.56,waves:['sine','triangle','sine']},pluck:{name:'Fog Bell',wave:'sine',base:48,oct:.55,filter:.82,attack:1.1,decay:2.05,harm:2.40,harmGain:.16,drift:1.001},bird:{name:'Far Bird',type:'sine',base:720,range:430,peak:1.16,end:.92,dur:.60,amp:.46}},
+ 'shrine':{pad:{voicing:'suspended',transpose:0,tone:.58,dry:.44,verb:1.52,delay:1.12,sub:.50,waves:['triangle','sine','sawtooth']},pluck:{name:'Resonant Wood',wave:'triangle',base:48,oct:.44,filter:.76,attack:.56,decay:1.35,harm:2.50,harmGain:.13,drift:.996},bird:{name:'Cuckoo',type:'sine',base:560,range:340,peak:1.19,end:.88,dur:.58,amp:.70}},
+ 'afterrain':{pad:{voicing:'open',transpose:0,tone:1.12,dry:.76,verb:1.10,delay:.72,sub:.32,waves:['sawtooth','triangle','sine']},pluck:{name:'Leaf Drop',wave:'sine',base:60,oct:.72,filter:1.30,attack:.46,decay:.84,harm:2.01,harmGain:.11,drift:1.004},bird:{name:'Fresh Song',type:'sine',base:1420,range:1650,peak:1.48,end:.86,dur:.27,amp:.92}}
+};
+const paletteKeys=Object.keys(soundPalettes);
+const padStyleNames={canopy:'Canopy Strings',rain:'Rain Strings',night:'Deep Night Strings',lake:'Lake Air',ancient:'Ancient Strings',sun:'Sunlit Strings',temple:'Temple Drone',pines:'Pine Strings',creek:'Creek Strings',fog:'Fog Choir',shrine:'Shrine Strings',afterrain:'After Rain Strings'};
+function componentPalette(kind){const k=state[kind+'Palette']||state.soundPalette||'canopy';return soundPalettes[k]||soundPalettes.canopy}
+function padSpec(){return componentPalette('pad').pad} function pluckSpec(){return componentPalette('pluck').pluck} function birdSpec(){return componentPalette('bird').bird}
+function voicedPadIntervals(def,mode){const n=def.notes,third=n.find(x=>x===3||x===4)??n[Math.min(1,n.length-1)],fifth=n.reduce((a,b)=>Math.abs(b-7)<Math.abs(a-7)?b:a,n[0]),color=n[Math.min(1,n.length-1)];if(mode==='close')return[0,third,fifth,12+color];if(mode==='low')return[0,fifth,12,12+third];if(mode==='high')return[0,12+third,12+fifth,24+color];if(mode==='suspended')return[0,fifth,12+color,19];return[0,fifth,12+third,24+color]}
+const presets={
+ 'Morning Forest':{timeOfDay:'morning',soundPalette:'canopy',brightness:.74,character:.38,depth:.40,pad:.12,padTone:.38,padMotion:.20,padSpread:.52,pluck:.56,pluckTone:.50,pluckDecay:.50,bird:.64,birdPitch:.50,birdWild:.50,rain:.04,wind:.14,space:.52,delay:.24,delayType:'digital',spaceType:'hall',master:.70,keyRoot:7,scaleKey:'major-pent'},
+ 'Rainy Woods':{timeOfDay:'morning',soundPalette:'rain',brightness:.34,character:.56,depth:.62,pad:.10,padTone:.28,padMotion:.16,padSpread:.44,pluck:.34,bird:.18,rain:.58,wind:.22,space:.74,delay:.36,delayType:'dub',spaceType:'plate',master:.66,keyRoot:4,scaleKey:'dorian'},
+ 'Deep Night':{timeOfDay:'night',soundPalette:'night',brightness:.16,character:.88,depth:.84,pad:.24,padTone:.18,padMotion:.34,padSpread:.64,pluck:.18,bird:.04,rain:.02,wind:.18,space:.92,delay:.62,delayType:'dub',spaceType:'cave',master:.66,keyRoot:0,scaleKey:'natural-minor'},
+ 'Misty Lake':{timeOfDay:'dawn',soundPalette:'lake',brightness:.48,character:.72,depth:.80,pad:.18,padTone:.32,padMotion:.18,padSpread:.72,pluck:.28,bird:.12,rain:.08,wind:.12,space:.96,delay:.72,delayType:'pingpong',spaceType:'shimmer',master:.68,keyRoot:9,scaleKey:'major-pent'},
+ 'Ancient Forest':{timeOfDay:'evening',soundPalette:'ancient',brightness:.28,character:.70,depth:.72,pad:.20,padTone:.22,padMotion:.26,padSpread:.66,pluck:.40,bird:.30,rain:.10,wind:.24,space:.82,delay:.50,delayType:'multitap',spaceType:'chamber',master:.68,keyRoot:2,scaleKey:'insen'},
+ 'Sunlit Canopy':{timeOfDay:'day',soundPalette:'sun',brightness:.88,character:.30,depth:.34,pad:.10,padTone:.58,padMotion:.22,padSpread:.48,pluck:.70,bird:.76,rain:.02,wind:.12,space:.44,delay:.20,delayType:'slap',spaceType:'plate',master:.70,keyRoot:0,scaleKey:'lydian'},
+ 'Moss Temple':{timeOfDay:'evening',soundPalette:'temple',brightness:.22,character:.78,depth:.78,pad:.22,padTone:.20,padMotion:.32,padSpread:.70,pluck:.30,bird:.14,rain:.08,wind:.20,space:.90,delay:.58,delayType:'dotted',spaceType:'cathedral',master:.66,keyRoot:6,scaleKey:'insen'},
+ 'Moonlit Pines':{timeOfDay:'night',soundPalette:'pines',brightness:.24,character:.82,depth:.74,pad:.20,padTone:.24,padMotion:.28,padSpread:.60,pluck:.24,bird:.08,rain:.03,wind:.26,space:.86,delay:.56,delayType:'pingpong',spaceType:'cave',master:.67,keyRoot:4,scaleKey:'minor-pent'},
+ 'Autumn Creek':{timeOfDay:'day',soundPalette:'creek',brightness:.58,character:.48,depth:.54,pad:.12,padTone:.42,padMotion:.18,padSpread:.50,pluck:.62,bird:.42,rain:.16,wind:.12,space:.62,delay:.32,delayType:'digital',spaceType:'spring',master:.69,keyRoot:9,scaleKey:'dorian'},
+ 'Fog Valley':{timeOfDay:'night',soundPalette:'fog',brightness:.30,character:.74,depth:.90,pad:.20,padTone:.22,padMotion:.20,padSpread:.78,pluck:.22,bird:.06,rain:.10,wind:.18,space:.98,delay:.70,delayType:'dotted',spaceType:'cathedral',master:.65,keyRoot:5,scaleKey:'natural-minor'},
+ 'Quiet Shrine':{timeOfDay:'dawn',soundPalette:'shrine',brightness:.40,character:.66,depth:.70,pad:.16,padTone:.30,padMotion:.14,padSpread:.64,pluck:.38,bird:.16,rain:.04,wind:.10,space:.88,delay:.46,delayType:'multitap',spaceType:'chamber',master:.67,keyRoot:11,scaleKey:'insen'},
+ 'After Rain':{timeOfDay:'morning',soundPalette:'afterrain',brightness:.68,character:.44,depth:.50,pad:.10,padTone:.46,padMotion:.16,padSpread:.52,pluck:.60,bird:.58,rain:.14,wind:.08,space:.68,delay:.30,delayType:'slap',spaceType:'hall',master:.69,keyRoot:4,scaleKey:'major-pent'},
+ 'First Light':{timeOfDay:'dawn',soundPalette:'afterrain',brightness:.78,character:.52,depth:.62,pad:.11,padTone:.48,padMotion:.10,padSpread:.58,pluck:.46,bird:.42,rain:.02,wind:.06,space:.76,delay:.22,delayType:'digital',spaceType:'hall',master:.68,keyRoot:2,scaleKey:'major'},
+ 'Blue Hour':{timeOfDay:'dawn',soundPalette:'fog',brightness:.26,character:.80,depth:.88,pad:.23,padTone:.17,padMotion:.24,padSpread:.86,pluck:.16,bird:.05,rain:.06,wind:.16,space:.97,delay:.64,delayType:'pingpong',spaceType:'cathedral',master:.64,keyRoot:10,scaleKey:'whole-tone'},
+ 'Dew Awakening':{timeOfDay:'dawn',soundPalette:'lake',brightness:.66,character:.40,depth:.52,pad:.09,padTone:.56,padMotion:.12,padSpread:.44,pluck:.72,bird:.52,rain:.05,wind:.05,space:.66,delay:.28,delayType:'multitap',spaceType:'plate',master:.68,keyRoot:5,scaleKey:'major-pent'},
+ 'Cedar Morning':{timeOfDay:'morning',soundPalette:'ancient',brightness:.52,character:.62,depth:.60,pad:.15,padTone:.31,padMotion:.20,padSpread:.64,pluck:.52,bird:.36,rain:.03,wind:.20,space:.70,delay:.34,delayType:'dotted',spaceType:'chamber',master:.67,keyRoot:0,scaleKey:'mixolydian'},
+ 'Birdsong Clearing':{timeOfDay:'morning',soundPalette:'sun',brightness:.94,character:.20,depth:.28,pad:.06,padTone:.72,padMotion:.08,padSpread:.34,pluck:.74,bird:.96,rain:.00,wind:.08,space:.38,delay:.14,delayType:'slap',spaceType:'plate',master:.69,keyRoot:7,scaleKey:'major'},
+ 'Green Cathedral':{timeOfDay:'day',soundPalette:'temple',brightness:.62,character:.76,depth:.76,pad:.20,padTone:.36,padMotion:.38,padSpread:.82,pluck:.22,bird:.20,rain:.02,wind:.18,space:.94,delay:.44,delayType:'dotted',spaceType:'cathedral',master:.67,keyRoot:5,scaleKey:'lydian'},
+ 'River Canopy':{timeOfDay:'day',soundPalette:'creek',brightness:.82,character:.34,depth:.46,pad:.08,padTone:.62,padMotion:.14,padSpread:.48,pluck:.88,bird:.54,rain:.20,wind:.06,space:.58,delay:.46,delayType:'pingpong',spaceType:'spring',master:.69,keyRoot:2,scaleKey:'mixolydian'},
+ 'Summer Shade':{timeOfDay:'day',soundPalette:'canopy',brightness:.44,character:.66,depth:.66,pad:.17,padTone:.29,padMotion:.28,padSpread:.72,pluck:.34,bird:.26,rain:.00,wind:.30,space:.78,delay:.18,delayType:'digital',spaceType:'hall',master:.67,keyRoot:10,scaleKey:'dorian'},
+ 'Amber Grove':{timeOfDay:'evening',soundPalette:'afterrain',brightness:.72,character:.52,depth:.58,pad:.14,padTone:.46,padMotion:.18,padSpread:.60,pluck:.56,bird:.26,rain:.02,wind:.12,space:.72,delay:.40,delayType:'multitap',spaceType:'plate',master:.68,keyRoot:9,scaleKey:'mixolydian'},
+ 'Golden Mist':{timeOfDay:'evening',soundPalette:'lake',brightness:.50,character:.74,depth:.86,pad:.22,padTone:.26,padMotion:.22,padSpread:.88,pluck:.20,bird:.08,rain:.07,wind:.14,space:.98,delay:.66,delayType:'dotted',spaceType:'shimmer',master:.65,keyRoot:3,scaleKey:'whole-tone'},
+ 'Dusk Creek':{timeOfDay:'evening',soundPalette:'creek',brightness:.36,character:.46,depth:.68,pad:.12,padTone:.34,padMotion:.14,padSpread:.52,pluck:.76,bird:.18,rain:.18,wind:.16,space:.76,delay:.54,delayType:'pingpong',spaceType:'spring',master:.67,keyRoot:7,scaleKey:'natural-minor'},
+ 'Starless Woods':{timeOfDay:'night',soundPalette:'night',brightness:.05,character:.95,depth:.96,pad:.30,padTone:.10,padMotion:.46,padSpread:.92,pluck:.08,bird:.01,rain:.00,wind:.34,space:1.00,delay:.78,delayType:'dub',spaceType:'cathedral',master:.62,keyRoot:1,scaleKey:'phrygian'},
+ 'Midnight Rain':{timeOfDay:'night',soundPalette:'rain',brightness:.18,character:.68,depth:.86,pad:.16,padTone:.16,padMotion:.20,padSpread:.70,pluck:.20,bird:.02,rain:.74,wind:.28,space:.90,delay:.58,delayType:'dub',spaceType:'cave',master:.63,keyRoot:8,scaleKey:'harmonic-minor'}
+};
+const timeThemeNames={dawn:'Dawn',morning:'Morning',day:'Day',evening:'Evening',night:'Night'};
+const timeThemes={
+ dawn:{scene:['#244433','#10271c','#06100b'],panel:'rgba(18,34,26,.74)',control:'rgba(10,22,16,.64)',hover:'rgba(37,60,43,.74)',text:'#edf3ea',muted:'#a8b3a5',accent:'#d8d6ad',orbHi:'rgba(238,244,218,.24)',orbMid:'rgba(117,158,119,.14)',orbLow:'rgba(17,47,31,.31)',skyGlow:'rgba(244,174,128,.20)',canvas:[[55,83,62],[187,200,184],[236,202,159]]},
+ morning:{scene:['#1d4932','#0c2418','#06100b'],panel:'rgba(15,32,23,.72)',control:'rgba(8,20,13,.62)',hover:'rgba(28,54,38,.72)',text:'#e7f1e9',muted:'#9eb0a3',accent:'#b9e6bd',orbHi:'rgba(231,255,237,.22)',orbMid:'rgba(102,170,122,.13)',orbLow:'rgba(12,42,24,.28)',skyGlow:'rgba(219,240,181,.08)',canvas:[[38,73,49],[190,220,200],[210,238,216]]},
+ day:{scene:['#4f8fb8','#245d48','#07170f'],panel:'rgba(14,39,31,.72)',control:'rgba(8,25,20,.62)',hover:'rgba(30,70,57,.72)',text:'#eef6f3',muted:'#a9bbb5',accent:'#d0edc7',orbHi:'rgba(228,247,255,.25)',orbMid:'rgba(104,178,158,.14)',orbLow:'rgba(12,49,34,.30)',skyGlow:'rgba(184,221,255,.27)',canvas:[[70,132,165],[179,215,221],[221,240,217]]},
+ evening:{scene:['#31452c','#17291b','#080f0a'],panel:'rgba(31,37,25,.74)',control:'rgba(20,25,16,.65)',hover:'rgba(58,62,35,.76)',text:'#f0eee5',muted:'#b5ae99',accent:'#d9c88d',orbHi:'rgba(248,232,193,.24)',orbMid:'rgba(151,143,90,.15)',orbLow:'rgba(37,47,27,.34)',skyGlow:'rgba(239,154,86,.23)',canvas:[[68,77,49],[204,192,161],[237,174,113]]},
+ night:{scene:['#102b24','#081b17','#030a08'],panel:'rgba(9,25,22,.78)',control:'rgba(5,17,15,.70)',hover:'rgba(20,47,41,.78)',text:'#e5eeee',muted:'#90a8a5',accent:'#9bcac0',orbHi:'rgba(204,235,229,.20)',orbMid:'rgba(65,125,113,.14)',orbLow:'rgba(8,32,29,.38)',skyGlow:'rgba(92,120,173,.18)',canvas:[[23,53,48],[121,154,151],[146,190,184]]}
+};
+let activeTimeTheme='';
+let visualTheme={glow:[38,73,49],fog:[190,220,200],particle:[210,238,216]},visualTarget={glow:[38,73,49],fog:[190,220,200],particle:[210,238,216]};
+function applyTimeTheme(name){name=timeThemes[name]?name:'morning';if(activeTimeTheme===name)return;activeTimeTheme=name;const th=timeThemes[name],root=document.documentElement.style;root.setProperty('--scene-a',th.scene[0]);root.setProperty('--scene-b',th.scene[1]);root.setProperty('--scene-c',th.scene[2]);root.setProperty('--panel',th.panel);root.setProperty('--control',th.control);root.setProperty('--control-hover',th.hover);root.setProperty('--text',th.text);root.setProperty('--muted',th.muted);root.setProperty('--accent',th.accent);root.setProperty('--orb-hi',th.orbHi);root.setProperty('--orb-mid',th.orbMid);root.setProperty('--orb-low',th.orbLow);root.setProperty('--sky-glow',th.skyGlow);visualTarget={glow:[...th.canvas[0]],fog:[...th.canvas[1]],particle:[...th.canvas[2]]};$('#app').dataset.time=name;}
+let ac,masterGain,compressor,reverb,spaceInput,spacePreDelay,spaceDampFilter,wetGain,dryGain,envVerbSend,toneVerbSend,delay,delayWet,windGain,rainGain,windFilter,rainFilter,rainAirFilter,padGain,padHP,padFilter,padMotion,padMotionGain,padDryGain,padVerbSend,padDelaySend,subGain,subOsc,subLfo,subLfoGain,transientNoise; let started=false,outputReady=false,playing=false,schedTimer=null,nextParticleAt=0,nextBirdAt=0; const padBanks=[[],[]],padBankGains=[],delayChains={}; let activePadBank=0,padBankCrossfading=false,sceneTransitioning=false; let sceneTransitionMix=0,sceneBridgeGain=1,sceneFxBridgeGain=1,sceneMorphFromPad=null,sceneMorphToPad=null; let harmonyTransition=null,harmonyMorphId=0; const SCENE_MORPH_MS=18000,HARMONY_MORPH_MS=9000;
+function noiseBuffer(seconds=4){const len=Math.floor(ac.sampleRate*seconds),b=ac.createBuffer(1,len,ac.sampleRate),d=b.getChannelData(0); let last=0; for(let i=0;i<len;i++){const w=Math.random()*2-1; last=.985*last+.015*w; d[i]=w*.66+last*.34;} return b}
+function impulse(seconds=8.2,decay=2.25){const len=Math.floor(ac.sampleRate*seconds),b=ac.createBuffer(2,len,ac.sampleRate); for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++){const t=i/len;d[i]=(Math.random()*2-1)*Math.pow(1-t,decay)*(0.7+0.3*Math.random())}}return b}
+function spaceImpulse(type){const spec={hall:[7.2,2.25,.018],plate:[4.2,1.65,.006],spring:[3.4,2.8,.012],chamber:[2.6,2.15,.010],cave:[10.5,2.65,.045],cathedral:[12.0,1.95,.060],shimmer:[8.4,1.65,.085]}[type]||[7.2,2.25,.018],len=Math.floor(ac.sampleRate*spec[0]),b=ac.createBuffer(2,len,ac.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c),pre=Math.floor(ac.sampleRate*(spec[2]+c*.004));let lp=0;for(let i=pre;i<len;i++){const t=(i-pre)/(len-pre),env=Math.pow(1-t,spec[1]),w=Math.random()*2-1;if(type==='spring'){const tt=i/ac.sampleRate;d[i]=env*(Math.sin(tt*2*Math.PI*(480+c*37))*.24+Math.sin(tt*2*Math.PI*(913+c*51))*.15+w*.11);}else if(type==='cave'||type==='cathedral'){lp=.92*lp+.08*w;const early=(i%(Math.floor(ac.sampleRate*(type==='cave'?.137:.181)))<2)?(.24*env):0;d[i]=(lp*.72+w*.20+early)*env;}else if(type==='shimmer'){lp=.58*lp+.42*w;d[i]=(w*.46-lp*.18)*env*(.72+.28*Math.sin(i*.031));}else if(type==='plate'){d[i]=w*env*(.76+.24*Math.sin(i*.017+c));}else{lp=.72*lp+.28*w;d[i]=(w*.60+lp*.32)*env;}}}return b}
+function makeDelayChain(type){const input=ac.createGain(),out=ac.createGain();out.gain.value=0;const tones=[],fbs=[];input.connect(out); // direct is disconnected below; keeps a common shape before construction
+ input.disconnect();const lp=(hz)=>{const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=hz;tones.push(f);return f};const fb=(v)=>{const g=ac.createGain();g.gain.value=v;fbs.push(g);return g};const pan=(v)=>{const p=ac.createStereoPanner();p.pan.value=v;return p};if(type==='pingpong'){const l=ac.createDelay(2.5),r=ac.createDelay(2.5),fl=lp(5200),fr=lp(5200),gl=fb(.42),gr=fb(.42),pl=pan(-.82),pr=pan(.82);l.delayTime.value=.36;r.delayTime.value=.54;input.connect(l);l.connect(fl);fl.connect(pl).connect(out);fl.connect(gl).connect(r);r.connect(fr);fr.connect(pr).connect(out);fr.connect(gr).connect(l);}else if(type==='slap'){const d=ac.createDelay(.4),f=lp(6500);d.delayTime.value=.105;input.connect(d);d.connect(f).connect(out);}else if(type==='dotted'){const d=ac.createDelay(2.5),f=lp(4800),g=fb(.48);d.delayTime.value=.72;input.connect(d);d.connect(f).connect(out);f.connect(g).connect(d);}else if(type==='dub'){const d=ac.createDelay(2.5),f=lp(2100),g=fb(.58);d.delayTime.value=.56;input.connect(d);d.connect(f).connect(out);f.connect(g).connect(d);}else if(type==='multitap'){[[.19,-.68,.72],[.38,.18,.54],[.67,.72,.42]].forEach(([t,pn,gn],i)=>{const d=ac.createDelay(2.5),f=lp(5600-i*900),p=pan(pn),g=ac.createGain();d.delayTime.value=t;g.gain.value=gn;input.connect(d);d.connect(f).connect(p).connect(g).connect(out)});}else{const d=ac.createDelay(2.5),f=lp(6200),g=fb(.44);d.delayTime.value=.48;input.connect(d);d.connect(f).connect(out);f.connect(g).connect(d);}out.connect(delayWet);return{input,out,tones,fbs}}
+function rebuildSpace(){if(!started||!reverb)return;reverb.buffer=spaceImpulse(state.spaceType||'hall')}
+function initAudio(){ac=new (window.AudioContext||window.webkitAudioContext)(); transientNoise=noiseBuffer(.35); masterGain=ac.createGain(); masterGain.gain.value=0; compressor=ac.createDynamicsCompressor(); compressor.threshold.value=-12; compressor.knee.value=18; compressor.ratio.value=4; compressor.attack.value=.01; compressor.release.value=.4; reverb=ac.createConvolver(); reverb.buffer=spaceImpulse(state.spaceType||'hall'); spaceInput=ac.createGain();spacePreDelay=ac.createDelay(.25);spaceDampFilter=ac.createBiquadFilter();spaceDampFilter.type='lowpass'; wetGain=ac.createGain(); wetGain.gain.value=0; dryGain=ac.createGain(); dryGain.gain.value=0; envVerbSend=ac.createGain(); envVerbSend.gain.value=0; toneVerbSend=ac.createGain(); toneVerbSend.gain.value=0; delay=ac.createGain(); delayWet=ac.createGain(); delayWet.gain.value=0;
+ masterGain.connect(compressor).connect(ac.destination); wetGain.connect(masterGain); dryGain.connect(masterGain); envVerbSend.connect(spaceInput); toneVerbSend.connect(spaceInput);spaceInput.connect(spacePreDelay).connect(reverb).connect(spaceDampFilter).connect(wetGain); delayWet.connect(masterGain); ['digital','pingpong','slap','dotted','dub','multitap'].forEach(k=>{delayChains[k]=makeDelayChain(k);delay.connect(delayChains[k].input)});
+ const wb=noiseBuffer(6); const wind=ac.createBufferSource(); wind.buffer=wb; wind.loop=true; windFilter=ac.createBiquadFilter(); windFilter.type='bandpass'; windGain=ac.createGain(); windGain.gain.value=0; wind.connect(windFilter).connect(windGain); windGain.connect(dryGain); windGain.connect(envVerbSend); wind.start();
+ const rb=noiseBuffer(5); const rain=ac.createBufferSource(); rain.buffer=rb; rain.loop=true; rainFilter=ac.createBiquadFilter(); rainFilter.type='highpass'; rainFilter.frequency.value=1700; rainFilter.Q.value=.42; rainAirFilter=ac.createBiquadFilter(); rainAirFilter.type='lowpass'; rainAirFilter.frequency.value=7200; rainAirFilter.Q.value=.28; rainGain=ac.createGain(); rainGain.gain.value=0; rain.connect(rainFilter).connect(rainAirFilter).connect(rainGain); rainGain.connect(dryGain); rainGain.connect(envVerbSend); rain.start();
+ padGain=ac.createGain(); padGain.gain.value=0; padHP=ac.createBiquadFilter(); padHP.type='highpass'; padHP.frequency.value=62; padFilter=ac.createBiquadFilter(); padFilter.type='lowpass'; padFilter.Q.value=.22; padDryGain=ac.createGain(); padDryGain.gain.value=0; padVerbSend=ac.createGain(); padVerbSend.gain.value=0; padDelaySend=ac.createGain(); padDelaySend.gain.value=0; padGain.connect(padHP).connect(padFilter); padFilter.connect(padDryGain).connect(dryGain); padFilter.connect(padVerbSend).connect(spaceInput); padFilter.connect(padDelaySend).connect(delay);
+ // Synth-string drone: four chord tones, each built from a small detuned saw ensemble.
+ const initialDef=scaleDefs[state.scaleKey],initialPad=padSpec(),initialInts=voicedPadIntervals(initialDef,initialPad.voicing),padBase=36+state.keyRoot+initialPad.transpose; const voiceLevels=[.050,.040,.030,.022];
+ for(let bank=0;bank<2;bank++){const bg=ac.createGain();bg.gain.value=bank===0?1:0;bg.connect(padGain);padBankGains.push(bg);initialInts.forEach((semi,i)=>{const oscs=[];[-11,0,9].forEach((det,j)=>{const o=ac.createOscillator(),g=ac.createGain(),baseDet=det+(i-1.5)*1.5;o.type=initialPad.waves[j]||'triangle';o.frequency.value=midiHz(padBase+semi);o.detune.value=baseDet*(.18+Math.pow(state.padSpread,1.08)*4.20);g.gain.value=[.014,.021,.015][j]*[1,.82,.64,.48][i];o.connect(g).connect(bg);o.start();oscs.push({o,g,baseDet})});padBanks[bank].push({oscs})})}
+ padMotion=ac.createOscillator(); padMotion.frequency.value=.055; padMotionGain=ac.createGain(); padMotionGain.gain.value=140; padMotion.connect(padMotionGain).connect(padFilter.frequency); padMotion.start();
+ subOsc=ac.createOscillator(); subOsc.type='sine'; subOsc.frequency.value=midiHz(24+state.keyRoot); subGain=ac.createGain(); subGain.gain.value=0; subLfo=ac.createOscillator(); subLfo.frequency.value=.037; subLfoGain=ac.createGain(); subLfoGain.gain.value=.008; subLfo.connect(subLfoGain).connect(subGain.gain); subOsc.connect(subGain); subGain.connect(dryGain); subGain.connect(toneVerbSend); subOsc.start(); subLfo.start();
+ nextParticleAt=ac.currentTime+1.2; nextBirdAt=ac.currentTime+4; updateAudio(true); schedTimer=setInterval(schedule,100); }
+function padSpecFor(snapshot){const k=snapshot.padPalette||snapshot.soundPalette||'canopy';return (soundPalettes[k]||soundPalettes.canopy).pad}
+function configurePadBank(bank,snapshot,ramp=.18){if(!started||!padBanks[bank])return;const now=ac.currentTime,def=scaleDefs[snapshot.scaleKey]||scaleDefs['minor-pent'],pd=padSpecFor(snapshot),ints=voicedPadIntervals(def,pd.voicing),base=36+snapshot.keyRoot+pd.transpose,spread=.18+Math.pow(snapshot.padSpread??state.padSpread,1.08)*4.20;padBanks[bank].forEach((v,i)=>v.oscs.forEach((part,j)=>{part.o.type=pd.waves[j]||'triangle';part.o.frequency.cancelScheduledValues(now);part.o.frequency.setTargetAtTime(midiHz(base+ints[i]),now,ramp);part.o.detune.cancelScheduledValues(now);part.o.detune.setTargetAtTime(part.baseDet*spread,now,ramp);part.g.gain.cancelScheduledValues(now);part.g.gain.setTargetAtTime([.014,.021,.015][j]*[1,.82,.64,.48][i],now,ramp)}))}
+function updateAudio(immediate=false,morphSeconds=0){if(!started)return; const now=ac.currentTime,tc=immediate?.01:(morphSeconds>0?morphSeconds/4:.22); const set=(p,v,t=tc)=>{p.cancelScheduledValues(now);const rt=morphSeconds>0?Math.max(t,tc):t;p.setTargetAtTime(v,now,rt)}; const ch=state.character,spaceOn=state.soundOn.space!==false,delayOn=state.soundOn.delay!==false,sp=spaceOn?Math.pow(state.space,1.55):0,br=state.brightness;
+ set(masterGain.gain,(!outputReady||!playing)?0:state.master*.72,(outputReady&&playing)?.38:.08);
+ set(windGain.gain,state.soundOn.wind?(.0015+Math.pow(state.wind,1.7)*.028):0);
+ set(rainGain.gain,state.soundOn.rain?(Math.pow(state.rain,2.05)*.010):0);
+ set(windFilter.frequency,130+Math.pow(br,1.35)*2400); set(windFilter.Q,.45+state.depth*1.2);
+ set(rainFilter.frequency,900+Math.pow(br,1.15)*1700); set(rainAirFilter.frequency,5600+br*3400);
+ // Pad is deliberately a background layer: low default level, long fades, darker filter and more wet than dry signal.
+ const padOn=state.soundOn.pad!==false,def=scaleDefs[state.scaleKey]||scaleDefs['minor-pent'],basePd=padSpec(),pd=(sceneTransitioning&&sceneMorphFromPad&&sceneMorphToPad)?{...basePd,tone:lerp(sceneMorphFromPad.tone,sceneMorphToPad.tone,sceneTransitionMix),dry:lerp(sceneMorphFromPad.dry,sceneMorphToPad.dry,sceneTransitionMix),verb:lerp(sceneMorphFromPad.verb,sceneMorphToPad.verb,sceneTransitionMix),delay:lerp(sceneMorphFromPad.delay,sceneMorphToPad.delay,sceneTransitionMix),sub:lerp(sceneMorphFromPad.sub,sceneMorphToPad.sub,sceneTransitionMix)}:basePd,ints=voicedPadIntervals(def,pd.voicing),padBase=36+state.keyRoot+pd.transpose;
+ const padTarget=(padOn&&outputReady)?state.pad*Math.pow(ch,1.18)*(.50+state.depth*.12):0;
+ set(padGain.gain,padTarget,immediate?.05:1.15);
+ const tone=clamp(state.padTone),toneDrive=clamp((.06+Math.pow(tone,1.05)*1.12+br*.16)*pd.tone,0,1.45); set(padFilter.frequency,240+Math.pow(toneDrive/1.45,.92)*9800,.40); set(padFilter.Q,.10+state.depth*.14+Math.pow(tone,2)*.38); set(padHP.frequency,38+Math.pow(1-tone,12)*16500+state.depth*18,.34);
+ set(padMotion.frequency,.008+Math.pow(state.padMotion,1.15)*.27,.45); set(padMotionGain.gain,14+Math.pow(state.padMotion,1.20)*920,.45);
+ set(padDryGain.gain,(.20+state.padTone*.09)*pd.dry,.55); set(padVerbSend.gain,spaceOn?(.22+sp*.58)*pd.verb:0,.55); set(padDelaySend.gain,delayOn?(.004+Math.pow(state.delay,1.35)*.28)*pd.delay:0,.4);
+ if(!padBankCrossfading)configurePadBank(activePadBank,state,.55);
+ set(subOsc.frequency,midiHz(24+state.keyRoot),.65); const subBase=(padOn&&outputReady)?state.pad*Math.pow(ch,2.0)*(.008+state.depth*.007)*pd.sub*(sceneTransitioning?sceneBridgeGain:1):0; set(subGain.gain,subBase,immediate?.05:1.4); set(subLfo.frequency,.010+Math.pow(state.padMotion,1.15)*.090,.7); set(subLfoGain.gain,subBase*(.06+Math.pow(state.padMotion,1.20)*.48),.7);
+ const fxBridge=sceneTransitioning?sceneFxBridgeGain:1,dl=delayOn?Math.pow(state.delay,1.35)*fxBridge:0;
+ set(envVerbSend.gain,spaceOn?(.002+sp*.58*fxBridge):0); set(toneVerbSend.gain,spaceOn?(.003+sp*(.50+ch*.82)*fxBridge):0);
+ set(wetGain.gain,spaceOn?(.004+sp*1.24*fxBridge):0); set(dryGain.gain,1-(spaceOn?state.space*.28*fxBridge:0)); set(spaceDampFilter.frequency,1200+Math.pow(1-state.spaceDamp,1.35)*12500);set(spacePreDelay.delayTime,.004+state.spacePre*.115,.18);
+ const selectedDelay=state.delayType||'digital',fbCtl=.05+Math.pow(state.delayFeedback,1.25)*.86,toneHz=1100+Math.pow(state.delayTone,1.2)*10500;Object.entries(delayChains).forEach(([k,c])=>{const active=delayOn&&k===selectedDelay,xf=sceneTransitioning?.55:.06;set(c.input.gain,active?1:0,xf);set(c.out.gain,delayOn?1:0,sceneTransitioning?.7:.12);c.tones.forEach((f,i)=>set(f.frequency,toneHz*(k==='dub'?.42:1)*(1-i*.06),.16));c.fbs.forEach(g=>set(g.gain,k==='slap'?0:Math.min(.88,fbCtl*(k==='dub'?1.02:k==='dotted'?.92:k==='pingpong'?.82:.78)),.15))});
+ set(delayWet.gain,delayOn?dl*(.10+dl*.62+sp*.08):0); }
+function routeEvent(node,panner,verb=1,delayAmt=1){node.connect(panner);panner.connect(dryGain);if(verb>0){const vg=ac.createGain();vg.gain.value=verb;panner.connect(vg).connect(toneVerbSend)}if(delayAmt>0){const dg=ac.createGain();dg.gain.value=delayAmt;panner.connect(dg).connect(delay)}}
+function particle(force=false){
+ if(!started||!playing||!state.soundOn.tones)return;
+ const now=ac.currentTime+.04,h=eventHarmony(),def=scaleDefs[h.scaleKey]||scaleDefs['minor-pent'],pd=pluckSpec(),mode=state.pluckPalette||state.soundPalette||'canopy';
+ const semi=def.notes[(Math.random()*def.notes.length)|0]+(Math.random()<pd.oct?12:0),f=midiHz(pd.base+h.keyRoot+semi),tone=.35+state.pluckTone*1.65,decMul=.35+Math.pow(state.pluckDecay,1.15)*2.65,amp=.012+.046*state.pluck;
+ const p=ac.createStereoPanner();p.pan.value=(Math.random()*2-1)*(.35+state.depth*.55);
+ const env=(peak,attack,decay)=>{const g=ac.createGain();g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(Math.max(.0002,peak),now+attack);g.gain.exponentialRampToValueAtTime(.0001,now+attack+decay);return g};
+ if(['ancient','temple','pines','shrine'].includes(mode)){
+   // Wooden modal pluck: a very short broadband strike excites several inharmonic body modes.
+   // Upper modes always die quickly; only the lowest body resonance lengthens with Decay.
+   // This keeps a recognisable wood-block / log character even at long Decay settings.
+   const woodProfiles={
+     ancient:{ratios:[1,2.18,3.86,6.15],amps:[1,.34,.13,.045],dec:[1,.43,.19,.09],dark:.82},
+     temple:{ratios:[1,2.34,4.12,6.72],amps:[1,.39,.15,.055],dec:[1,.46,.20,.095],dark:.92},
+     pines:{ratios:[1,2.62,4.75,7.60],amps:[1,.31,.12,.050],dec:[1,.36,.15,.07],dark:1.12},
+     shrine:{ratios:[1,1.93,3.47,5.68],amps:[1,.43,.17,.060],dec:[1,.50,.22,.10],dark:.88}
+   },wp=woodProfiles[mode],woodLevel=.008+.042*Math.pow(state.pluck,1.08),sum=ac.createGain();
+   // Mallet/contact click: deliberately very short regardless of the Decay control.
+   const src=ac.createBufferSource(),hitHP=ac.createBiquadFilter(),hitLP=ac.createBiquadFilter(),hit=env(woodLevel*(.44+.20*state.pluckTone),.0015,.018+.020*(1-state.pluckTone));
+   src.buffer=transientNoise;hitHP.type='highpass';hitHP.frequency.value=180;hitLP.type='lowpass';hitLP.frequency.value=1500+state.pluckTone*5200;src.connect(hitHP).connect(hitLP).connect(hit).connect(sum);
+   // Modal body. Decay only strongly affects the fundamental; upper wooden modes stay short.
+   const bodyDecay=.16+Math.pow(state.pluckDecay,1.15)*.78;
+   wp.ratios.forEach((r,i)=>{const o=ac.createOscillator(),g=env(woodLevel*wp.amps[i]*(i===0?1.0:(.72+state.pluckTone*.46)),.0018,Math.max(.045,bodyDecay*wp.dec[i]));o.type='sine';o.frequency.setValueAtTime(f*r,now);o.frequency.exponentialRampToValueAtTime(f*r*(i===0?.994:.998),now+Math.max(.06,bodyDecay*wp.dec[i]));o.detune.value=(Math.random()-.5)*(i?3:1.2);o.connect(g).connect(sum);o.start(now);o.stop(now+1.45+bodyDecay)});
+   // Broad, low-Q cavity resonance adds body without turning into a sustained synth oscillator.
+   const cavity=ac.createBiquadFilter(),cavityGain=ac.createGain();cavity.type='bandpass';cavity.frequency.value=Math.max(90,f*(.72+.08*state.pluckTone));cavity.Q.value=1.15+state.pluckTone*1.6;cavityGain.gain.value=.42*wp.dark;hit.connect(cavity).connect(cavityGain).connect(sum);
+   routeEvent(sum,p,.34,.14);src.start(now);src.stop(now+.09);
+ }else if(mode==='sun'){
+   // Chime: inharmonic metal partials with independent long decays.
+   const sum=ac.createGain();[1,2.71,4.08,5.43].forEach((r,i)=>{const o=ac.createOscillator(),g=env(amp*[.30,.14,.07,.035][i],.002,(.45+1.7*state.pluckDecay)*[1,.85,.65,.5][i]);o.type='sine';o.frequency.value=f*r*(1+(Math.random()-.5)*.003);o.connect(g).connect(sum);o.start(now);o.stop(now+3.8*decMul)});routeEvent(sum,p,.52,.38);
+ }else if(['lake','fog'].includes(mode)){
+   // Glass / fog bell: soft attack, strong sine partials and long bloom.
+   const sum=ac.createGain();[1,2.02,3.97].forEach((r,i)=>{const o=ac.createOscillator(),g=env(amp*[.46,.17,.07][i],.012+.025*state.character,(.7+2.2*state.pluckDecay)*[1,.78,.58][i]);o.type='sine';o.frequency.value=f*r;o.detune.value=(i-1)*5*state.pluckTone;o.connect(g).connect(sum);o.start(now);o.stop(now+5*decMul)});routeEvent(sum,p,.62,.42);
+ }else if(mode==='night'){
+   // Ember: low, dark, slightly unstable resonant pulse.
+   const o=ac.createOscillator(),lp=ac.createBiquadFilter(),g=env(amp*.9,.018,.5+1.8*state.pluckDecay);o.type='triangle';o.frequency.setValueAtTime(f*.5,now);o.frequency.exponentialRampToValueAtTime(f*.495,now+1.4);lp.type='lowpass';lp.frequency.value=350+tone*900;lp.Q.value=1.4+state.pluckTone*5;o.connect(lp).connect(g);routeEvent(g,p,.9,.65);o.start(now);o.stop(now+3.6*decMul);
+ }else{
+   // Dew / raindrop / creek: clean pitched droplet.
+   const o=ac.createOscillator(),h=ac.createOscillator(),sum=ac.createGain(),og=env(amp,.003+.012*state.character,(.12+1.15*state.pluckDecay)*pd.decay),hg=env(amp*pd.harmGain*tone,.003,(.08+.75*state.pluckDecay)*pd.decay),lp=ac.createBiquadFilter();o.type=pd.wave;h.type='sine';o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(f*pd.drift,now+1.1);h.frequency.value=f*pd.harm;lp.type='lowpass';lp.frequency.value=(900+state.brightness*6200)*pd.filter*tone;o.connect(og).connect(lp);h.connect(hg).connect(lp);lp.connect(sum);routeEvent(sum,p,1,1);o.start(now);h.start(now);o.stop(now+3*decMul);h.stop(now+3*decMul);
+ }
+ flash();
+}
+function bird(){
+ if(!started||!playing||!state.soundOn.birds)return;
+ const now=ac.currentTime+.03,bd=birdSpec(),mode=state.birdPalette||state.soundPalette||'canopy',wild=state.birdWild,pitch=Math.pow(2,(state.birdPitch-.5)*1.35),level=(.006+state.bird*.016)*bd.amp;
+ const chirp=(when,f1,f2,dur,amp=1,type='sine')=>{const o=ac.createOscillator(),g=ac.createGain(),p=ac.createStereoPanner();o.type=type;o.frequency.setValueAtTime(Math.max(60,f1*pitch),when);o.frequency.exponentialRampToValueAtTime(Math.max(60,f2*pitch),when+dur*.72);g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(level*amp,when+Math.min(.025,dur*.18));g.gain.exponentialRampToValueAtTime(.0001,when+dur);p.pan.value=Math.random()*1.6-.8;o.connect(g);routeEvent(g,p,1.05,0);o.start(when);o.stop(when+dur+.05)};
+ if(mode==='night'){
+   // Owl: two low rounded hoots.
+   const f=260+state.brightness*90;chirp(now,f,f*.93,.62,1.0,'sine');chirp(now+.78+wild*.22,f*.86,f*.82,.72,.86,'sine');
+ }else if(mode==='shrine'){
+   // Cuckoo: unmistakable two-note call.
+   const f=520+state.brightness*180;chirp(now,f*1.19,f*1.17,.26,.92,'sine');chirp(now+.31,f,f*.98,.34,1.0,'sine');
+ }else if(mode==='temple'){
+   // Dove: low coo with repeated soft pulses.
+   const f=360+state.brightness*110;const count=2+(wild>.65?1:0);for(let i=0;i<count;i++)chirp(now+i*.34,f*(1+i*.035),f*.96,.42,.72,'sine');
+ }else if(mode==='sun'){
+   // Warbler: bright multi-note flourish.
+   const count=3+Math.floor(wild*4),base=1450+state.brightness*950;for(let i=0;i<count;i++)chirp(now+i*(.055+.035*(1-wild)),base*(.88+Math.random()*.38),base*(1.18+Math.random()*.42),.09+.05*Math.random(),.72,'sine');
+ }else if(['rain','fog'].includes(mode)){
+   // Distant whistle: slow, soft and narrow.
+   const f=720+state.brightness*520;chirp(now,f,f*(1.08+wild*.10),.72+.42*(1-wild),.60,'sine');
+ }else if(mode==='lake'){
+   const f=760+state.brightness*680;chirp(now,f*1.05,f*.86,.42,.66,'triangle');chirp(now+.18,f*.82,f*1.10,.36,.52,'sine');
+ }else{
+   // Songbird / woodland / creek: 2–5 articulated chirps.
+   const count=2+Math.floor(wild*4),base=bd.base+state.brightness*bd.range*.65;for(let i=0;i<count;i++){const a=base*(.82+Math.random()*.34),b=a*(1.12+Math.random()*.34);chirp(now+i*(.08+.07*(1-wild)),a,b,.11+.12*Math.random(),.72+Math.random()*.22,bd.type)}
+ }
+}
+function schedule(){if(!started||!playing)return; const now=ac.currentTime,ch=state.character,eventBridge=sceneTransitioning?sceneBridgeGain:1,p=clamp(state.pluck*eventBridge),b=clamp(state.bird*eventBridge);
+ if(now>=nextParticleAt){
+   if(p>.005){const burst=p>.86?2:1;for(let i=0;i<burst;i++)setTimeout(()=>particle(true),i*55)}
+   const base=Math.exp(lerp(Math.log(24),Math.log(.16),Math.pow(p,.90)))*lerp(.82,1.16,ch);nextParticleAt=now+base*(.78+Math.random()*.40)
+ }
+ if(now>=nextBirdAt){
+   if(b>.005){const burst=b>.90?2:1;for(let i=0;i<burst;i++)setTimeout(bird,i*85)}
+   const birdBase=Math.exp(lerp(Math.log(36),Math.log(.34),Math.pow(b,.90)));nextBirdAt=now+birdBase*(.80+Math.random()*.38)
+ } }
+function eventHarmony(){
+ if(!harmonyTransition)return{keyRoot:state.keyRoot,scaleKey:state.scaleKey};
+ const h=harmonyTransition,m=clamp(h.mix??0);return Math.random()<m?{keyRoot:h.toRoot,scaleKey:h.toScale}:{keyRoot:h.fromRoot,scaleKey:h.fromScale}
+}
+function setCustomPresetLabel(timeOfDay){const sel=$('#preset'),opt=$('#customPresetOption');if(!sel||!opt)return;opt.hidden=false;opt.textContent=`Custom Drift · ${timeThemeNames[timeOfDay]||'Forest'}`;sel.value='__custom__'}
+function crossfadeHarmony(toRoot,toScale,label='Harmony Drift'){
+ toRoot=Number(toRoot);toScale=scaleDefs[toScale]?toScale:'minor-pent';const fromRoot=state.keyRoot,fromScale=state.scaleKey;if(fromRoot===toRoot&&fromScale===toScale){syncUI();return}
+ const id=++harmonyMorphId,startAt=performance.now(),duration=HARMONY_MORPH_MS;harmonyTransition={fromRoot,fromScale,toRoot,toScale,mix:0,owner:`h${id}`};
+ let oldBank=activePadBank,targetBank=null,lastBank=0,subSwitched=false;
+ if(started&&padBankGains.length===2&&!sceneTransitioning){targetBank=1-activePadBank;configurePadBank(targetBank,{...state,keyRoot:toRoot,scaleKey:toScale},.05);const n=ac.currentTime;padBankGains[oldBank].gain.cancelScheduledValues(n);padBankGains[targetBank].gain.cancelScheduledValues(n);padBankGains[oldBank].gain.setValueAtTime(Math.max(.0001,padBankGains[oldBank].gain.value),n);padBankGains[targetBank].gain.setValueAtTime(.0001,n);padBankCrossfading=true}
+ state.keyRoot=toRoot;state.scaleKey=toScale;syncUI();
+ const tick=now=>{if(id!==harmonyMorphId)return;const t=clamp((now-startAt)/duration),mix=.5-.5*Math.cos(Math.PI*t);if(harmonyTransition&&harmonyTransition.owner===`h${id}`)harmonyTransition.mix=mix;
+  if(started&&targetBank!=null&&now-lastBank>70){const n=ac.currentTime,oldLevel=Math.cos(mix*Math.PI/2),newLevel=Math.sin(mix*Math.PI/2);padBankGains[oldBank].gain.cancelScheduledValues(n);padBankGains[targetBank].gain.cancelScheduledValues(n);padBankGains[oldBank].gain.setTargetAtTime(Math.max(.0001,oldLevel),n,.20);padBankGains[targetBank].gain.setTargetAtTime(Math.max(.0001,newLevel),n,.20);lastBank=now}
+  if(started&&!subSwitched&&t>=.5){subSwitched=true;const n=ac.currentTime;subGain.gain.cancelScheduledValues(n);subGain.gain.setTargetAtTime(.0001,n,.20);subOsc.frequency.cancelScheduledValues(n);subOsc.frequency.setValueAtTime(midiHz(24+toRoot),n+.18)}
+  if(t<1)requestAnimationFrame(tick);else{if(targetBank!=null){activePadBank=targetBank;padBankCrossfading=false;const n=ac.currentTime;padBankGains[activePadBank].gain.setTargetAtTime(1,n,.18);padBankGains[1-activePadBank].gain.setTargetAtTime(.0001,n,.18)}if(harmonyTransition&&harmonyTransition.owner===`h${id}`)harmonyTransition=null;if(started)updateAudio(false,1.4);toast(`${label} · ${keyNames[toRoot]} ${(scaleDefs[toScale]||scaleDefs['minor-pent']).name}`)}};
+ requestAnimationFrame(tick);toast(`${label} · 9s`)
+}
+let presetMorphId=0;
+function transitionDefaults(target){const delayDefaults={digital:[.52,.62],pingpong:[.58,.68],slap:[.05,.78],dotted:[.52,.58],dub:[.72,.28],multitap:[.24,.70]},spaceDefaults={hall:[.42,.26],plate:[.28,.08],spring:[.62,.05],chamber:[.36,.12],cave:[.70,.48],cathedral:[.52,.62],shimmer:[.20,.55]};if(target.delayFeedback==null||target.delayTone==null)[target.delayFeedback,target.delayTone]=delayDefaults[target.delayType]||[.55,.55];if(target.spaceDamp==null||target.spacePre==null)[target.spaceDamp,target.spacePre]=spaceDefaults[target.spaceType]||[.46,.30];return target}
+function crossfadeScene(rawTarget,label){
+ const target=transitionDefaults({...rawTarget}),morphId=++presetMorphId,duration=SCENE_MORPH_MS,startAt=performance.now();
+ const numericKeys=['brightness','character','depth','pad','padTone','padMotion','padSpread','pluck','pluckTone','pluckDecay','bird','birdPitch','birdWild','rain','wind','space','delay','delayFeedback','delayTone','spaceDamp','spacePre','master'];
+ const from={};numericKeys.forEach(k=>from[k]=Number(state[k]));
+ const oldPadSpec={...padSpecFor(state)},newPadSpec={...padSpecFor({...state,...target,padPalette:target.padPalette||target.soundPalette||state.padPalette})};
+ const harmonyFromRoot=state.keyRoot,harmonyFromScale=state.scaleKey,harmonyToRoot=target.keyRoot??state.keyRoot,harmonyToScale=target.scaleKey||state.scaleKey;
+ sceneTransitioning=true;sceneTransitionMix=0;sceneBridgeGain=1;sceneFxBridgeGain=1;sceneMorphFromPad=oldPadSpec;sceneMorphToPad=newPadSpec;harmonyTransition={fromRoot:harmonyFromRoot,fromScale:harmonyFromScale,toRoot:harmonyToRoot,toScale:harmonyToScale,mix:0,owner:`s${morphId}`};
+ state.timeOfDay=target.timeOfDay||state.timeOfDay;applyTimeTheme(state.timeOfDay);
+ let targetPadBank=null,oldPadBank=activePadBank;
+ if(started&&padBankGains.length===2){targetPadBank=1-activePadBank;configurePadBank(targetPadBank,{...state,...target},.05);const n=ac.currentTime;padBankGains[oldPadBank].gain.cancelScheduledValues(n);padBankGains[targetPadBank].gain.cancelScheduledValues(n);padBankGains[oldPadBank].gain.setValueAtTime(Math.max(.0001,padBankGains[oldPadBank].gain.value),n);padBankGains[targetPadBank].gain.setValueAtTime(.0001,n);padBankCrossfading=true}
+ let discreteSwitched=false,lastAudio=0,lastBank=0;
+ const switchDiscrete=()=>{if(discreteSwitched)return;discreteSwitched=true;state.soundPalette=target.soundPalette||state.soundPalette;state.padPalette=target.padPalette||target.soundPalette||state.padPalette;state.pluckPalette=target.pluckPalette||target.soundPalette||state.pluckPalette;state.birdPalette=target.birdPalette||target.soundPalette||state.birdPalette;state.keyRoot=target.keyRoot??state.keyRoot;state.scaleKey=target.scaleKey||state.scaleKey;state.delayType=target.delayType||state.delayType;state.spaceType=target.spaceType||state.spaceType;if(started){rebuildSpace();nextParticleAt=Math.max(nextParticleAt,ac.currentTime+.55);nextBirdAt=Math.max(nextBirdAt,ac.currentTime+.85);updateAudio(false,2.2)}};
+ const bridgeAt=t=>{const d=Math.min(1,Math.abs(t-.5)/.24),sm=d*d*(3-2*d);return .06+.94*sm};
+ const fxBridgeAt=t=>{const d=Math.min(1,Math.abs(t-.5)/.30),sm=d*d*(3-2*d);return .08+.92*sm};
+ const tick=(now)=>{if(morphId!==presetMorphId)return;const t=clamp((now-startAt)/duration),mix=.5-.5*Math.cos(Math.PI*t);sceneTransitionMix=mix;sceneBridgeGain=bridgeAt(t);sceneFxBridgeGain=fxBridgeAt(t);if(harmonyTransition&&harmonyTransition.owner===`s${morphId}`)harmonyTransition.mix=mix;
+  numericKeys.forEach(k=>{if(Number.isFinite(target[k]))state[k]=from[k]*(1-mix)+target[k]*mix});
+  if(t>=.5)switchDiscrete();syncUI();
+  if(started&&targetPadBank!=null&&now-lastBank>70){const n=ac.currentTime,oldLevel=Math.cos(mix*Math.PI/2),newLevel=Math.sin(mix*Math.PI/2);padBankGains[oldPadBank].gain.cancelScheduledValues(n);padBankGains[targetPadBank].gain.cancelScheduledValues(n);padBankGains[oldPadBank].gain.setTargetAtTime(Math.max(.0001,oldLevel),n,.18);padBankGains[targetPadBank].gain.setTargetAtTime(Math.max(.0001,newLevel),n,.18);lastBank=now}
+  if(started&&now-lastAudio>120){updateAudio(false,2.8);lastAudio=now}
+  if(t<1){requestAnimationFrame(tick)}else{switchDiscrete();numericKeys.forEach(k=>{if(Number.isFinite(target[k]))state[k]=target[k]});if(targetPadBank!=null){activePadBank=targetPadBank;padBankCrossfading=false;const n=ac.currentTime;padBankGains[activePadBank].gain.cancelScheduledValues(n);padBankGains[activePadBank].gain.setTargetAtTime(1,n,.16);padBankGains[1-activePadBank].gain.cancelScheduledValues(n);padBankGains[1-activePadBank].gain.setTargetAtTime(.0001,n,.16)}sceneTransitioning=false;sceneTransitionMix=1;sceneBridgeGain=1;sceneFxBridgeGain=1;sceneMorphFromPad=null;sceneMorphToPad=null;if(harmonyTransition&&harmonyTransition.owner===`s${morphId}`)harmonyTransition=null;syncUI();if(started)updateAudio(false,1.8);toast(`${label} · ${keyNames[state.keyRoot]} ${(scaleDefs[state.scaleKey]||scaleDefs['minor-pent']).name}`)}};
+ requestAnimationFrame(tick);toast(`${label} · day drift 18s`)
+}
+function applyPreset(name){const preset=presets[name];if(!preset)return;const opt=$('#customPresetOption');if(opt)opt.hidden=true;$('#preset').value=name;crossfadeScene(preset,`${timeThemeNames[preset.timeOfDay]} · ${name}`)}
+function randomize(scope){
+ const pick=a=>a[(Math.random()*a.length)|0],cl=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),j=(v,amt,a=0,b=1)=>cl(v+(Math.random()*2-1)*amt,a,b);
+ const requested=scope||$('#randomScope')?.value||'all';
+ const times=Object.keys(timeThemes),timeOfDay=requested==='all'?pick(times):requested;
+ const pool=Object.values(presets).filter(p=>p.timeOfDay===timeOfDay),anchor=pick(pool);
+ const scoped=requested!=='all';
+ const palettes=scoped?[...new Set(pool.map(p=>p.soundPalette).filter(Boolean))]:paletteKeys,padPalettes=scoped?[...new Set(pool.map(p=>p.padPalette||p.soundPalette).filter(Boolean))]:paletteKeys,pluckPalettes=scoped?[...new Set(pool.map(p=>p.pluckPalette||p.soundPalette).filter(Boolean))]:paletteKeys,birdPalettes=scoped?[...new Set(pool.map(p=>p.birdPalette||p.soundPalette).filter(Boolean))]:paletteKeys;
+ const scales=scoped?[...new Set(pool.map(p=>p.scaleKey))]:Object.keys(scaleDefs),keys=scoped?[...new Set(pool.map(p=>p.keyRoot))]:Array.from({length:12},(_,i)=>i),dtypes=scoped?[...new Set(pool.map(p=>p.delayType).filter(Boolean))]:['digital','pingpong','slap','dotted','dub','multitap'],stypes=scoped?[...new Set(pool.map(p=>p.spaceType).filter(Boolean))]:['hall','plate','spring','chamber','cave','cathedral','shimmer'];
+ const target={
+  timeOfDay,
+  brightness:j(anchor.brightness,.18,.03,.97),character:j(anchor.character,.20,.03,.97),depth:j(anchor.depth,.18,.05,.98),
+  pluck:j(anchor.pluck,.24,0,.98),bird:j(anchor.bird,.24,0,.98),rain:j(anchor.rain,.20,0,.82),wind:j(anchor.wind,.20,0,.82),space:j(anchor.space,.18,.05,1),delay:j(anchor.delay,.20,.02,.95),
+  pluckTone:j(anchor.pluckTone??.5,.24,.02,.98),pluckDecay:j(anchor.pluckDecay??.5,.24,.02,.98),birdPitch:j(anchor.birdPitch??.5,.24,.02,.98),birdWild:j(anchor.birdWild??.5,.25,.02,.98),
+  pad:j(anchor.pad,.10,.02,.46),padTone:j(anchor.padTone,.22,.01,.95),padMotion:j(anchor.padMotion,.20,.01,.88),padSpread:j(anchor.padSpread,.20,.05,.98),
+  delayFeedback:j(anchor.delayFeedback??.55,.18,.12,.92),delayTone:j(anchor.delayTone??.55,.22,.08,.96),spaceDamp:j(anchor.spaceDamp??.46,.20,.06,.94),spacePre:j(anchor.spacePre??.30,.20,.02,.88),
+  delayType:pick(dtypes.length?dtypes:['digital']),spaceType:pick(stypes.length?stypes:['hall']),keyRoot:pick(keys.length?keys:[anchor.keyRoot]),scaleKey:pick(scales.length?scales:[anchor.scaleKey]),
+  soundPalette:pick(palettes.length?palettes:[anchor.soundPalette]),padPalette:pick(padPalettes.length?padPalettes:[anchor.soundPalette]),pluckPalette:pick(pluckPalettes.length?pluckPalettes:[anchor.soundPalette]),birdPalette:pick(birdPalettes.length?birdPalettes:[anchor.soundPalette]),master:state.master
+ };
+ setCustomPresetLabel(timeOfDay);crossfadeScene(target,`Custom Drift · ${timeThemeNames[timeOfDay]}`)
+}
+function syncUI(){applyTimeTheme(state.timeOfDay||'morning');cursor.style.left=(state.brightness*100)+'%';cursor.style.top=((1-state.character)*100)+'%';readout.textContent=`Brightness ${Math.round(state.brightness*100)} · Pad ${Math.round(state.character*100)} · Depth ${Math.round(state.depth*100)}`; ['pad','delay','pluck','bird','rain','wind','space','master'].forEach(k=>{const el=$('#'+k);if(document.activeElement!==el)el.value=Math.round(state[k]*100);$('#'+k+'Out').value=Math.round(state[k]*100)}); [['padTone','padTone'],['padMotionCtl','padMotion'],['padSpread','padSpread'],['pluckToneCtl','pluckTone'],['pluckDecayCtl','pluckDecay'],['birdPitchCtl','birdPitch'],['birdWildCtl','birdWild'],['delayFeedbackCtl','delayFeedback'],['delayToneCtl','delayTone'],['spaceDampCtl','spaceDamp'],['spacePreCtl','spacePre']].forEach(([id,k])=>{const el=$('#'+id);if(document.activeElement!==el)el.value=Math.round(state[k]*100);const outId=id.replace('Ctl','')+'Out';const out=$('#'+outId);if(out)out.value=Math.round(state[k]*100)}); $('#padStyle').value=state.padPalette||state.soundPalette||'canopy'; $('#pluckType').value=state.pluckPalette||state.soundPalette||'canopy'; $('#birdType').value=state.birdPalette||state.soundPalette||'canopy'; $('#delayType').value=state.delayType||'digital'; $('#spaceType').value=state.spaceType||'hall'; $('#key').value=String(state.keyRoot); $('#scale').value=state.scaleKey; document.querySelectorAll('[data-sound]').forEach(b=>{const on=state.soundOn[b.dataset.sound]!==false,label=b.dataset.label||b.dataset.sound;b.textContent=label;b.classList.toggle('active',on);b.classList.toggle('off',!on);b.setAttribute('aria-pressed',on?'true':'false');b.title=`${label} ${on?'On':'Off'}`}); const tr=$('#transport');if(tr){tr.textContent=playing?'Stop':'Play';tr.classList.toggle('active',playing);tr.setAttribute('aria-pressed',playing?'true':'false')}}
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1100)}
+function buildSoundMenus(){const padSel=$('#padStyle'),pluckSel=$('#pluckType'),birdSel=$('#birdType');paletteKeys.forEach(k=>{const po=document.createElement('option');po.value=k;po.textContent=padStyleNames[k]||k;padSel.appendChild(po);const qo=document.createElement('option');qo.value=k;qo.textContent=soundPalettes[k].pluck.name;pluckSel.appendChild(qo);const bo=document.createElement('option');bo.value=k;bo.textContent=soundPalettes[k].bird.name;birdSel.appendChild(bo)});}
+buildSoundMenus();
+$('#padStyle').addEventListener('change',e=>{state.padPalette=e.target.value;updateAudio();toast(`Pad: ${padStyleNames[e.target.value]||e.target.value}`)});
+$('#pluckType').addEventListener('change',e=>{state.pluckPalette=e.target.value;if(started){nextParticleAt=Math.min(nextParticleAt,ac.currentTime+.04);particle(true)}toast(`Pluck: ${soundPalettes[e.target.value].pluck.name}`)});
+$('#birdType').addEventListener('change',e=>{state.birdPalette=e.target.value;if(started){nextBirdAt=Math.min(nextBirdAt,ac.currentTime+.04);bird()}toast(`Bird: ${soundPalettes[e.target.value].bird.name}`)});
+$('#delayType').addEventListener('change',e=>{state.delayType=e.target.value;syncUI();updateAudio();toast(`Delay: ${e.target.options[e.target.selectedIndex].text}`)});
+$('#spaceType').addEventListener('change',e=>{state.spaceType=e.target.value;if(started)rebuildSpace();syncUI();updateAudio();toast(`Space: ${e.target.options[e.target.selectedIndex].text}`)});
+['pad','delay','pluck','bird','rain','wind','space','master'].forEach(k=>$('#'+k).addEventListener('input',e=>{state[k]=e.target.value/100;syncUI();updateAudio()}));
+function rearmDensity(kind){if(!started||!playing)return;const now=ac.currentTime,ch=state.character;if(kind==='pluck'){const p=clamp(state.pluck),base=Math.exp(lerp(Math.log(24),Math.log(.16),Math.pow(p,.90)))*lerp(.82,1.16,ch);nextParticleAt=now+Math.min(1.25,Math.max(.10,base*(.86+Math.random()*.22)))}else{const b=clamp(state.bird),base=Math.exp(lerp(Math.log(36),Math.log(.34),Math.pow(b,.90)));nextBirdAt=now+Math.min(1.8,Math.max(.16,base*(.86+Math.random()*.22)))}}
+$('#pluck').addEventListener('change',()=>rearmDensity('pluck'));$('#bird').addEventListener('change',()=>rearmDensity('bird'));[['padTone','padTone'],['padMotionCtl','padMotion'],['padSpread','padSpread'],['pluckToneCtl','pluckTone'],['pluckDecayCtl','pluckDecay'],['birdPitchCtl','birdPitch'],['birdWildCtl','birdWild'],['delayFeedbackCtl','delayFeedback'],['delayToneCtl','delayTone'],['spaceDampCtl','spaceDamp'],['spacePreCtl','spacePre']].forEach(([id,k])=>$('#'+id).addEventListener('input',e=>{state[k]=e.target.value/100;syncUI();updateAudio()})); const editorOrder=[...document.querySelectorAll('.sound-editor')];
+function restoreEditorOrder(){const rack=$('#mixerRack');if(!rack)return;editorOrder.forEach(ed=>rack.appendChild(ed))}
+document.querySelectorAll('[data-editor]').forEach(btn=>btn.addEventListener('click',()=>{const target=$('#'+btn.dataset.editor),wasHidden=target.classList.contains('hidden'),mobile=matchMedia('(max-width:700px)').matches;document.querySelectorAll('.sound-editor').forEach(x=>x.classList.add('hidden'));if(wasHidden){if(mobile){const param=btn.closest('.param');if(param)param.insertAdjacentElement('afterend',target)}target.classList.remove('hidden');if(mobile)requestAnimationFrame(()=>target.scrollIntoView({behavior:'smooth',block:'nearest'}))}}));
+addEventListener('resize',()=>{if(!matchMedia('(max-width:700px)').matches)restoreEditorOrder()});
+$('#preset').addEventListener('change',e=>{if(e.target.value!=='__custom__')applyPreset(e.target.value)}); $('#key').addEventListener('change',e=>{const root=Number(e.target.value),scale=state.scaleKey;setCustomPresetLabel(state.timeOfDay);crossfadeHarmony(root,scale,'Key Drift')}); $('#scale').addEventListener('change',e=>{const root=state.keyRoot,scale=e.target.value;setCustomPresetLabel(state.timeOfDay);crossfadeHarmony(root,scale,'Scale Drift')}); document.querySelectorAll('[data-sound]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.sound;state.soundOn[k]=!state.soundOn[k];syncUI();updateAudio();toast(`${b.dataset.label||k} ${state.soundOn[k]?'On':'Off'}`)})); $('#randomize').onclick=()=>randomize($('#randomScope').value); $('#transport').onclick=async()=>{if(!started)return;if(playing){playing=false;updateAudio(false);toast('Stopped')}else{if(ac.state==='suspended')await ac.resume();playing=true;const now=ac.currentTime;nextParticleAt=now+.45;nextBirdAt=now+1.1;updateAudio(false);toast('Playing')}syncUI()};
+$('#save').onclick=()=>{localStorage.setItem('forestAmbientPreset',JSON.stringify(state));toast('Saved locally')}; $('#load').onclick=()=>{try{const s=JSON.parse(localStorage.getItem('forestAmbientPreset'));if(s){if(s.character==null&&s.activity!=null)s.character=s.activity;delete s.density;const incoming={...(s.soundOn||{})};if(incoming.drone!=null&&incoming.pad==null)incoming.pad=incoming.drone;delete incoming.drone;const sounds={...state.soundOn,...incoming};delete s.wander;Object.assign(state,s);state.muted=false;state.soundOn=sounds;if(state.scaleKey&&state.scaleKey.startsWith('d-'))state.scaleKey=state.scaleKey.slice(2);if(state.scaleKey==='aeolian')state.scaleKey='natural-minor';if(!scaleDefs[state.scaleKey])state.scaleKey='minor-pent';state.keyRoot=Number.isFinite(Number(state.keyRoot))?Number(state.keyRoot):2;if(state.pad==null)state.pad=.22;if(state.padTone==null)state.padTone=.34;if(state.padMotion==null)state.padMotion=.28;if(state.padSpread==null)state.padSpread=.52;if(state.pluck==null)state.pluck=.52;if(state.pluckTone==null)state.pluckTone=.50;if(state.pluckDecay==null)state.pluckDecay=.50;if(state.bird==null)state.bird=.38;if(state.birdPitch==null)state.birdPitch=.50;if(state.birdWild==null)state.birdWild=.50;if(state.delay==null)state.delay=.42;if(state.delayFeedback==null)state.delayFeedback=.55;if(state.delayTone==null)state.delayTone=.55;if(!['digital','pingpong','slap','dotted','dub','multitap'].includes(state.delayType))state.delayType='digital';if(state.spaceDamp==null)state.spaceDamp=.46;if(state.spacePre==null)state.spacePre=.30;if(!['hall','plate','spring','chamber','cave','cathedral','shimmer'].includes(state.spaceType))state.spaceType='hall';if(!soundPalettes[state.soundPalette])state.soundPalette='canopy';if(!soundPalettes[state.padPalette])state.padPalette=state.soundPalette;if(!soundPalettes[state.pluckPalette])state.pluckPalette=state.soundPalette;if(!soundPalettes[state.birdPalette])state.birdPalette=state.soundPalette;if(!timeThemes[state.timeOfDay])state.timeOfDay='morning';applyTimeTheme(state.timeOfDay);if(started)rebuildSpace();syncUI();updateAudio();toast('Loaded')}}catch{toast('No saved preset')}};
+const orb=$('#orb'),cursor=$('#cursor'),readout=$('#readout'); let dragging=false,moved=false,down={x:0,y:0};
+function orbSet(e){const r=orb.getBoundingClientRect();state.brightness=clamp((e.clientX-r.left)/r.width);state.character=clamp(1-(e.clientY-r.top)/r.height);syncUI();updateAudio()}
+orb.addEventListener('pointerdown',e=>{dragging=true;moved=false;down={x:e.clientX,y:e.clientY};orb.setPointerCapture(e.pointerId)}); orb.addEventListener('pointermove',e=>{if(!dragging)return;if(Math.hypot(e.clientX-down.x,e.clientY-down.y)>5)moved=true;orbSet(e)}); orb.addEventListener('pointerup',e=>{if(!moved)particle(true);dragging=false});
+orb.addEventListener('wheel',e=>{e.preventDefault();state.depth=clamp(state.depth-e.deltaY*.001);syncUI();updateAudio()},{passive:false});
+let pinch=null;orb.addEventListener('touchstart',e=>{if(e.touches.length===2){pinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)}},{passive:true});orb.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinch){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);state.depth=clamp(state.depth+(d-pinch)*.002);pinch=d;syncUI();updateAudio()}},{passive:true});
+$('#startBtn').onclick=async()=>{if(!started){started=true;initAudio()}if(ac.state==='suspended')await ac.resume();outputReady=true;playing=true;const now=ac.currentTime;nextParticleAt=now+1.2;nextBirdAt=now+4;syncUI();updateAudio(false);$('#start').classList.add('hidden')};
+// visual forest
+const cvs=$('#forest'),ctx=cvs.getContext('2d');let W=0,H=0,dpr=1,particles=[];function resize(){dpr=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cvs.width=W*dpr;cvs.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
+for(let i=0;i<85;i++)particles.push({x:Math.random()*W,y:Math.random()*H,r:.5+Math.random()*1.8,v:.05+Math.random()*.18,a:.05+Math.random()*.18});let pulse=0;function flash(){pulse=1}
+function draw(t){const blend=(a,b,k)=>a+(b-a)*k;['glow','fog','particle'].forEach(k=>{for(let i=0;i<3;i++)visualTheme[k][i]=blend(visualTheme[k][i],visualTarget[k][i],.0028)});ctx.clearRect(0,0,W,H);const g=ctx.createRadialGradient(W*.5,H*.34,20,W*.5,H*.45,Math.max(W,H)*.7),gl=visualTheme.glow;const lift=.72+state.brightness*.50;g.addColorStop(0,`rgba(${Math.round(gl[0]*lift)},${Math.round(gl[1]*lift)},${Math.round(gl[2]*lift)},.31)`);g.addColorStop(1,'rgba(1,5,7,.05)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ const fog=8+state.depth*20,fg=visualTheme.fog;for(let i=0;i<4;i++){const y=H*(.35+i*.13)+Math.sin(t*.00008+i)*22;const grad=ctx.createLinearGradient(0,y-50,0,y+50);grad.addColorStop(0,`rgba(${fg[0]|0},${fg[1]|0},${fg[2]|0},0)`);grad.addColorStop(.5,`rgba(${fg[0]|0},${fg[1]|0},${fg[2]|0},${.012+state.depth*.012})`);grad.addColorStop(1,`rgba(${fg[0]|0},${fg[1]|0},${fg[2]|0},0)`);ctx.fillStyle=grad;ctx.fillRect(0,y-50,W,100+fog)}
+ const pt=visualTheme.particle;particles.forEach(p=>{p.y-=p.v*(.55+state.character*.75);p.x+=Math.sin(t*.0003+p.y)*.08;if(p.y<-5){p.y=H+5;p.x=Math.random()*W}ctx.beginPath();ctx.fillStyle=`rgba(${pt[0]|0},${pt[1]|0},${pt[2]|0},${p.a*(.4+state.brightness*.8)})`;ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}); if(pulse>.01){ctx.beginPath();ctx.arc(W*.5,H*.42,70+(1-pulse)*210,0,Math.PI*2);ctx.strokeStyle=`rgba(${pt[0]|0},${pt[1]|0},${pt[2]|0},${pulse*.10})`;ctx.stroke();pulse*=.93} requestAnimationFrame(draw)}applyTimeTheme(state.timeOfDay);requestAnimationFrame(draw);syncUI();
+
+// Mobile two-screen UI: keep performance controls and mixer separate without page scrolling.
+function setMobileView(view){
+ const app=$('#app'),scene=$('#sceneTab'),mix=$('#mixTab');if(!app||!scene||!mix)return;
+ view=view==='mix'?'mix':'scene';app.dataset.mobileView=view;
+ scene.classList.toggle('active',view==='scene');mix.classList.toggle('active',view==='mix');
+ scene.setAttribute('aria-selected',view==='scene'?'true':'false');mix.setAttribute('aria-selected',view==='mix'?'true':'false');
+ if(view==='scene')document.querySelectorAll('.sound-editor').forEach(x=>x.classList.add('hidden'));if(!matchMedia('(max-width:700px)').matches)restoreEditorOrder();
+ requestAnimationFrame(()=>{resize();});
+}
+$('#sceneTab')?.addEventListener('click',()=>setMobileView('scene'));
+$('#mixTab')?.addEventListener('click',()=>setMobileView('mix'));
+setMobileView('scene');
+// iOS Safari lifecycle: resume Web Audio only after a user gesture / foreground return.
+const resumeForIOS=async()=>{if(started&&playing&&ac&&ac.state==='suspended'){try{await ac.resume();updateAudio(false)}catch(_){}}};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)resumeForIOS()});
+window.addEventListener('pageshow',resumeForIOS);
+document.addEventListener('touchend',resumeForIOS,{passive:true});
+if(window.visualViewport){window.visualViewport.addEventListener('resize',()=>{resize()},{passive:true});}
+
+})();
+</script>
+</body>
+</html>
